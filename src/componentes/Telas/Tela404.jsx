@@ -1,4 +1,4 @@
-import Pagina from './Pagina';
+import Pagina from '../layouts/Pagina';
 import imgErro from '../../assets/imagens/erro.jpg';
 import { Container } from 'react-bootstrap';
 

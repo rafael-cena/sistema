@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
+import { propTypes } from 'react-bootstrap/esm/Image';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
-export default function FormCadProduto() {
+export default function FormCadProduto(props) {
     const [validated, setValidated] = useState(false);
 
     const handleSubmit = (event) => {
@@ -104,7 +105,14 @@ export default function FormCadProduto() {
                     </InputGroup>
                 </Form.Group>
             </Row>
-            <Button type="submit">Cadastrar</Button>
+            <Row className='mt-2 mb-2'>
+                <Col md={1}>
+                    <Button type="submit">Cadastrar</Button>
+                </Col>
+                <Col md={{offset:1}}>
+                    <Button onClick={() => {props.setExibirTabela(true);}}>Voltar</Button>
+                </Col>
+            </Row>
         </Form>
     );
 }

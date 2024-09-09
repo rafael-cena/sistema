@@ -1,5 +1,5 @@
-import FormCadCategoria from "../Formularios/FormCadCategoria";
-import Pagina from './Pagina';
+import FormCadCategoria from "./Formularios/FormCadCategoria";
+import Pagina from '../layouts/Pagina';
 import { Alert } from "react-bootstrap";
 
 export default function TelaCadastroCategoria(props) {

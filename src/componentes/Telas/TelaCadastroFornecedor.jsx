@@ -1,5 +1,5 @@
-import FormCadFornecedor from "../Formularios/FormCadFornecedor";
-import Pagina from './Pagina';
+import FormCadFornecedor from "./Formularios/FormCadFornecedor";
+import Pagina from '../layouts/Pagina';
 import { Alert } from "react-bootstrap";
 
 export default function TelaCadastroFornecedor(props) {

@@ -5,7 +5,7 @@ export default function Cabecalho (props) {
 
     return (
         <Alert className="text-center" variant="light">
-            {props.titulo || "Título não informado"} 
+            <h1>{props.titulo || "Título não informado"}</h1>
         </Alert>
     );
 }

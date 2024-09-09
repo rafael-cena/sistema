@@ -1,9 +1,9 @@
-import TelaCadastroCategoria from "./componentes/layouts/TelaCadastroCategoria";
-import TelaCadastroCliente from "./componentes/layouts/TelaCadastroCliente";
-import TelaCadastroFornecedor from "./componentes/layouts/TelaCadastroFornecedor";
-import TelaCadastroProduto from "./componentes/layouts/TelaCadastroProduto";
-import Tela404 from "./componentes/layouts/Tela404";
-import TelaMenu from "./componentes/layouts/TelaMenu";
+import TelaCadastroCategoria from "./componentes/Telas/TelaCadastroCategoria";
+import TelaCadastroCliente from "./componentes/Telas/TelaCadastroCliente";
+import TelaCadastroFornecedor from "./componentes/Telas/TelaCadastroFornecedor";
+import TelaCadastroProduto from "./componentes/Telas/TelaCadastroProduto";
+import Tela404 from "./componentes/Telas/Tela404";
+import TelaMenu from "./componentes/Telas/TelaMenu";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {

@@ -1,4 +1,4 @@
-import Pagina from './Pagina';
+import Pagina from '../layouts/Pagina';
 
 export default function TelaMenu (props) {
     return (

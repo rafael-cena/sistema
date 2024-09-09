@@ -1,5 +1,5 @@
-import FormCadCliente from "../Formularios/FormCadCliente";
-import Pagina from './Pagina';
+import FormCadCliente from "./Formularios/FormCadCliente";
+import Pagina from '../layouts/Pagina';
 import { Alert } from "react-bootstrap";
 
 export default function TelaCadastroCliente(props) {
