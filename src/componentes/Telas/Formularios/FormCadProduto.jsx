@@ -1,103 +1,142 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import { propTypes } from 'react-bootstrap/esm/Image';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
 export default function FormCadProduto(props) {
-    const [validated, setValidated] = useState(false);
+    const [produto, setProduto] = useState({
+        codigo:"",
+        descricao:"",
+        precoCusto:"",
+        precoVenda:"",
+        qtdEstoque:"",
+        urlImagem:"",
+        dataValidade:""
+    });
+    function manipularMudanca (evento) {
+        const elemento = evento.target.name;
+        const valor = evento.target.value;
+        setProduto({...produto, [elemento]:valor}); // "..." é um operador de espalhamento
+    }
 
-    const handleSubmit = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+    const [validated, setFormValidated] = useState(false);
+
+    function handleSubmit (evento) {
+        const form = evento.currentTarget;
+        if (form.checkValidity()) {
+            //cadastrar produto
+            props.listaProdutos.push(produto);
+            // exibir a tabela com o produto incluido
+            props.setExibirTabela(true);
         }
-
-        setValidated(true);
-    };
+        else {
+            setFormValidated(true);
+        }
+        evento.preventDefault();
+        evento.stopPropagation();
+    }
 
     return (
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
-                <Form.Group as={Col} md="3" controlId="validationCustom01">
+                <Form.Group as={Col} md="3">
                     <Form.Label>Codigo</Form.Label>
                     <Form.Control
                         required
                         type="text"
-                        placeholder="01"
+                        id="codigo"
+                        value={produto.codigo}
+                        onChange={manipularMudanca}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="9" controlId="validationCustom02">
+                <Form.Group as={Col} md="9">
                     <Form.Label>Descrição</Form.Label>
                     <Form.Control
                         required
                         type="text"
-                        placeholder="Descrição/Nome do Produto"
+                        id="descricao"
+                        value={produto.descricao}
+                        onChange={manipularMudanca}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
             </Row>
             <Row className="mb-3">
-                <Form.Group as={Col} md="9" controlId="validationCustom02">
+                <Form.Group as={Col} md="9">
                     <Form.Label>Url da imagem</Form.Label>
                     <Form.Control
                         required
                         type="text"
-                        placeholder="Descrição/Nome do Produto"
+                        id="urlImagem"
+                        value={produto.urlImagem}
+                        onChange={manipularMudanca}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="3" controlId="validationCustom01">
+                <Form.Group as={Col} md="3">
                     <Form.Label>Data de Validade</Form.Label>
                     <Form.Control
                         required
-                        type="date"
-                        placeholder="01"
+                        type="text"
+                        id="dataValidade"
+                        value={produto.dataValidade}
+                        onChange={manipularMudanca}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
             </Row>
             <Row className="mb-3">
-                <Form.Group as={Col} md="4" controlId="validationCustomUsername">
+                <Form.Group as={Col} md="4">
                     <Form.Label>Preço de Custo</Form.Label>
                     <InputGroup hasValidation>
                         <InputGroup.Text id="inputGroupPrepend">R$</InputGroup.Text>
                         <Form.Control
-                            type="number"
+                            type="text"
+                            id="precoCusto"
                             aria-describedby="inputGroupPrepend"
                             required
+                            value={produto.precoCusto}
+
+                            onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type="invalid">
                             Please choose a username.
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
-                <Form.Group as={Col} md="4" controlId="validationCustomUsername">
+                <Form.Group as={Col} md="4">
                     <Form.Label>Preço de Venda</Form.Label>
                     <InputGroup hasValidation>
                         <InputGroup.Text id="inputGroupPrepend">R$</InputGroup.Text>
                         <Form.Control
-                            type="number"
+                            type="text"
+                            id="precoVenda"
                             aria-describedby="inputGroupPrepend"
                             required
+                            value={produto.precoVenda}
+
+                            onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type="invalid">
                             Please choose a username.
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
-                <Form.Group as={Col} md="4" controlId="validationCustomUsername">
+                <Form.Group as={Col} md="4">
                     <Form.Label>Estoque</Form.Label>
                     <InputGroup hasValidation>
                         <InputGroup.Text id="inputGroupPrepend">+</InputGroup.Text>
                         <Form.Control
-                            type="number"
+                            type="text"
+                            id="qtdEstoque"
                             aria-describedby="inputGroupPrepend"
                             required
+                            value={produto.qtdEstoque}
+
+                            onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type="invalid">
                             Please choose a username.
