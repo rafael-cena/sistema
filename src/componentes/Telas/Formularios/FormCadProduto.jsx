@@ -7,27 +7,28 @@ import Row from 'react-bootstrap/Row';
 
 export default function FormCadProduto(props) {
     const [produto, setProduto] = useState({
-        codigo:"",
-        descricao:"",
-        precoCusto:"",
-        precoVenda:"",
-        qtdEstoque:"",
-        urlImagem:"",
-        dataValidade:""
+        codigo: "",
+        descricao: "",
+        precoCusto: 0,
+        precoVenda: 0,
+        qtdEstoque: 0,
+        urlImagem: "",
+        dataValidade: ""
     });
-    function manipularMudanca (evento) {
+
+    function manipularMudanca(evento) {
         const elemento = evento.target.name;
         const valor = evento.target.value;
-        setProduto({...produto, [elemento]:valor}); // "..." é um operador de espalhamento
+        setProduto({ ...produto, [elemento]: valor }); // "..." é um operador de espalhamento
     }
 
     const [validated, setFormValidated] = useState(false);
 
-    function handleSubmit (evento) {
+    function handleSubmit(evento) {
         const form = evento.currentTarget;
         if (form.checkValidity()) {
             //cadastrar produto
-            props.listaProdutos.push(produto);
+            props.setListaDeProdutos([...props.listaDeProdutos], produto);
             // exibir a tabela com o produto incluido
             props.setExibirTabela(true);
         }
@@ -99,7 +100,6 @@ export default function FormCadProduto(props) {
                             aria-describedby="inputGroupPrepend"
                             required
                             value={produto.precoCusto}
-
                             onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -117,7 +117,6 @@ export default function FormCadProduto(props) {
                             aria-describedby="inputGroupPrepend"
                             required
                             value={produto.precoVenda}
-
                             onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -135,7 +134,6 @@ export default function FormCadProduto(props) {
                             aria-describedby="inputGroupPrepend"
                             required
                             value={produto.qtdEstoque}
-
                             onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -146,10 +144,14 @@ export default function FormCadProduto(props) {
             </Row>
             <Row className='mt-2 mb-2'>
                 <Col md={1}>
-                    <Button type="submit">Cadastrar</Button>
+                    {
+                        props.modoAlterar ?
+                        <Button type="submit">Cadastrar</Button> :
+                        <Button type="submit">Alterar</Button>
+                    }
                 </Col>
-                <Col md={{offset:1}}>
-                    <Button onClick={() => {props.setExibirTabela(true);}}>Voltar</Button>
+                <Col md={{ offset: 1 }}>
+                    <Button onClick={() => { props.setExibirTabela(true); }}>Voltar</Button>
                 </Col>
             </Row>
         </Form>
