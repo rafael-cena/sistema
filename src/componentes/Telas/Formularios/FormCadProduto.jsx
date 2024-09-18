@@ -7,30 +7,37 @@ import Row from 'react-bootstrap/Row';
 
 export default function FormCadProduto(props) {
     const [produto, setProduto] = useState({
-        codigo: "",
+        codigo: 0,
         descricao: "",
         precoCusto: 0,
         precoVenda: 0,
         qtdEstoque: 0,
         urlImagem: "",
         dataValidade: ""
-    });
 
-    function manipularMudanca(evento) {
-        const elemento = evento.target.name;
-        const valor = evento.target.value;
-        setProduto({ ...produto, [elemento]: valor }); // "..." é um operador de espalhamento
-    }
+    });
 
     const [validated, setFormValidated] = useState(false);
 
     function handleSubmit(evento) {
         const form = evento.currentTarget;
         if (form.checkValidity()) {
-            //cadastrar produto
-            props.setListaDeProdutos([...props.listaDeProdutos], produto);
-            // exibir a tabela com o produto incluido
-            props.setExibirTabela(true);
+            if (props.modoAlterar) {
+                props.setListaDeProdutos(props.listaProdutos.filter((item) => {
+                    if (item.codigo !== produto.codigo) {
+                        return item;
+                    }
+                    else {
+                        return produto;
+                    }
+                }));
+            }
+            else {
+                //cadastrar produto
+                props.setListaDeProdutos([...props.listaProdutos], produto);
+                // exibir a tabela com o produto incluido
+                props.setExibirTabela(true);
+            }
         }
         else {
             setFormValidated(true);
@@ -38,6 +45,13 @@ export default function FormCadProduto(props) {
         evento.preventDefault();
         evento.stopPropagation();
     }
+
+    function manipularMudanca(evento) {
+        const elemento = evento.target.name;
+        const valor = evento.target.value;
+        setProduto({ ...produto, [elemento]: valor });
+    }
+    // "..." é um operador de espalhamento
 
     return (
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -48,7 +62,12 @@ export default function FormCadProduto(props) {
                         required
                         type="text"
                         id="codigo"
-                        value={produto.codigo}
+                        name="codigo"
+                        value={
+                            props.modoAlterar ?
+                                props.produtoAlterar.codigo :
+                                produto.codigo
+                        }
                         onChange={manipularMudanca}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -59,7 +78,12 @@ export default function FormCadProduto(props) {
                         required
                         type="text"
                         id="descricao"
-                        value={produto.descricao}
+                        name="descricao"
+                        value={
+                            props.modoAlterar ?
+                                props.produtoAlterar.descricao :
+                                produto.descricao
+                        }
                         onChange={manipularMudanca}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -72,7 +96,12 @@ export default function FormCadProduto(props) {
                         required
                         type="text"
                         id="urlImagem"
-                        value={produto.urlImagem}
+                        name="urlImagem"
+                        value={
+                            props.modoAlterar ?
+                                props.produtoAlterar.urlImagem :
+                                produto.urlImagem
+                        }
                         onChange={manipularMudanca}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -83,7 +112,12 @@ export default function FormCadProduto(props) {
                         required
                         type="text"
                         id="dataValidade"
-                        value={produto.dataValidade}
+                        name="dataValidade"
+                        value={
+                            props.modoAlterar ?
+                                props.produtoAlterar.dataValidade :
+                                produto.dataValidade
+                        }
                         onChange={manipularMudanca}
                     />
                     <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -97,9 +131,14 @@ export default function FormCadProduto(props) {
                         <Form.Control
                             type="text"
                             id="precoCusto"
+                            name="precoCusto"
                             aria-describedby="inputGroupPrepend"
                             required
-                            value={produto.precoCusto}
+                            value={
+                                props.modoAlterar ?
+                                    props.produtoAlterar.precoCusto :
+                                    produto.precoCusto
+                            }
                             onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -114,9 +153,14 @@ export default function FormCadProduto(props) {
                         <Form.Control
                             type="text"
                             id="precoVenda"
+                            name="precoVenda"
                             aria-describedby="inputGroupPrepend"
                             required
-                            value={produto.precoVenda}
+                            value={
+                                props.modoAlterar ?
+                                    props.produtoAlterar.precoVenda :
+                                    produto.precoVenda
+                            }
                             onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -131,9 +175,14 @@ export default function FormCadProduto(props) {
                         <Form.Control
                             type="text"
                             id="qtdEstoque"
+                            name="qtdEstoque"
                             aria-describedby="inputGroupPrepend"
                             required
-                            value={produto.qtdEstoque}
+                            value={
+                                props.modoAlterar ?
+                                    props.produtoAlterar.qtdEstoque :
+                                    produto.qtdEstoque
+                            }
                             onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -146,8 +195,8 @@ export default function FormCadProduto(props) {
                 <Col md={1}>
                     {
                         props.modoAlterar ?
-                        <Button type="submit">Cadastrar</Button> :
-                        <Button type="submit">Alterar</Button>
+                            <Button type="submit">Alterar</Button> :
+                            <Button type="submit">Cadastrar</Button>
                     }
                 </Col>
                 <Col md={{ offset: 1 }}>
