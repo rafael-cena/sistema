@@ -1,5 +1,4 @@
 import { Button, Container, Table } from "react-bootstrap";
-import FormCadProduto from "../Formularios/FormCadProduto";
 
 export default function TabelaProdutos(props) {
 

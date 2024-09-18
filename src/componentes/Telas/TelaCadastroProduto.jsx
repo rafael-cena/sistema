@@ -30,10 +30,11 @@ export default function TelaCadastroProduto(props) {
                 exibirTabela ? 
                 <TabelaProdutos listaProdutos={listaDeProdutos} setListaDeProdutos={setListaDeProdutos} 
                                 setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
-                                modoAlterar={modoAlterar} setProdutoSelecionado={setProdutoSelecionado} /> : 
+                                modoAlterar={modoAlterar} setProdutoSelecionado={setProdutoSelecionado} /> :
                 <FormCadProduto listaProdutos={listaDeProdutos} setListaDeProdutos={setListaDeProdutos}
                                 setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
-                                modoAlterar={modoAlterar} produtoSelecionado={produtoSelecionado} />
+                                modoAlterar={modoAlterar} 
+                                setProdutoSelecionado={setProdutoSelecionado} produtoSelecionado={produtoSelecionado} />
             }
         </Pagina>
     );

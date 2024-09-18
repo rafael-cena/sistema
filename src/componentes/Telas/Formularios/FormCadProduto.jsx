@@ -14,7 +14,6 @@ export default function FormCadProduto(props) {
         qtdEstoque: 0,
         urlImagem: "",
         dataValidade: ""
-
     });
 
     const [validated, setFormValidated] = useState(false);
@@ -23,21 +22,24 @@ export default function FormCadProduto(props) {
         const form = evento.currentTarget;
         if (form.checkValidity()) {
             if (props.modoAlterar) {
-                props.setListaDeProdutos(props.listaProdutos.filter((item) => {
-                    if (item.codigo !== produto.codigo) {
+                props.setListaDeProdutos(props.listaProdutos?.filter((item) => {
+                    if (item.codigo !== props.produtoSelecionado.codigo) {
                         return item;
                     }
                     else {
-                        return produto;
+                        return props.produtoSelecionado;
                     }
+                    // return (item.codigo !== props.produtoSelecionado.codigo ? item : props.produtoSelecionado);
                 }));
+                props.setModoAlterar(false);
             }
             else {
                 //cadastrar produto
                 props.setListaDeProdutos([...props.listaProdutos], produto);
-                // exibir a tabela com o produto incluido
-                props.setExibirTabela(true);
+
             }
+            // exibir a tabela com o produto incluido/alterado
+            props.setExibirTabela(true);
         }
         else {
             setFormValidated(true);
@@ -49,7 +51,12 @@ export default function FormCadProduto(props) {
     function manipularMudanca(evento) {
         const elemento = evento.target.name;
         const valor = evento.target.value;
-        setProduto({ ...produto, [elemento]: valor });
+        if (props.modoAlterar) {
+            props.setProdutoSelecionado({ ...props.produtoSelecionado, [elemento]: valor });
+        }
+        else {
+            setProduto({ ...produto, [elemento]: valor });
+        }
     }
     // "..." é um operador de espalhamento
 
@@ -63,9 +70,14 @@ export default function FormCadProduto(props) {
                         type="text"
                         id="codigo"
                         name="codigo"
+                        disabled={
+                            props.modoAlterar ?
+                                true :
+                                false
+                        }
                         value={
                             props.modoAlterar ?
-                                props.produtoAlterar.codigo :
+                                props.produtoSelecionado.codigo :
                                 produto.codigo
                         }
                         onChange={manipularMudanca}
@@ -81,7 +93,7 @@ export default function FormCadProduto(props) {
                         name="descricao"
                         value={
                             props.modoAlterar ?
-                                props.produtoAlterar.descricao :
+                                props.produtoSelecionado.descricao :
                                 produto.descricao
                         }
                         onChange={manipularMudanca}
@@ -99,7 +111,7 @@ export default function FormCadProduto(props) {
                         name="urlImagem"
                         value={
                             props.modoAlterar ?
-                                props.produtoAlterar.urlImagem :
+                                props.produtoSelecionado.urlImagem :
                                 produto.urlImagem
                         }
                         onChange={manipularMudanca}
@@ -115,7 +127,7 @@ export default function FormCadProduto(props) {
                         name="dataValidade"
                         value={
                             props.modoAlterar ?
-                                props.produtoAlterar.dataValidade :
+                                props.produtoSelecionado.dataValidade :
                                 produto.dataValidade
                         }
                         onChange={manipularMudanca}
@@ -136,7 +148,7 @@ export default function FormCadProduto(props) {
                             required
                             value={
                                 props.modoAlterar ?
-                                    props.produtoAlterar.precoCusto :
+                                    props.produtoSelecionado.precoCusto :
                                     produto.precoCusto
                             }
                             onChange={manipularMudanca}
@@ -158,7 +170,7 @@ export default function FormCadProduto(props) {
                             required
                             value={
                                 props.modoAlterar ?
-                                    props.produtoAlterar.precoVenda :
+                                    props.produtoSelecionado.precoVenda :
                                     produto.precoVenda
                             }
                             onChange={manipularMudanca}
@@ -173,14 +185,14 @@ export default function FormCadProduto(props) {
                     <InputGroup hasValidation>
                         <InputGroup.Text id="inputGroupPrepend">+</InputGroup.Text>
                         <Form.Control
-                            type="text"
+                            type="number"
                             id="qtdEstoque"
                             name="qtdEstoque"
                             aria-describedby="inputGroupPrepend"
                             required
                             value={
                                 props.modoAlterar ?
-                                    props.produtoAlterar.qtdEstoque :
+                                    props.produtoSelecionado.qtdEstoque :
                                     produto.qtdEstoque
                             }
                             onChange={manipularMudanca}
