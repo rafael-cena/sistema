@@ -22,21 +22,20 @@ export default function FormCadProduto(props) {
         const form = evento.currentTarget;
         if (form.checkValidity()) {
             if (props.modoAlterar) {
-                props.setListaDeProdutos(props.listaProdutos?.filter((item) => {
-                    if (item.codigo !== props.produtoSelecionado.codigo) {
-                        return item;
-                    }
-                    else {
-                        return props.produtoSelecionado;
-                    }
-                    // return (item.codigo !== props.produtoSelecionado.codigo ? item : props.produtoSelecionado);
+                props.setListaDeProdutos(props.listaProdutos.map((item) => {
+                    // if (item.codigo !== props.produtoSelecionado.codigo) {
+                    //     return item;
+                    // }
+                    // else {
+                    //     return props.produtoSelecionado;
+                    // }
+                    return item.codigo !== props.produtoSelecionado.codigo ? item : props.produtoSelecionado;
                 }));
                 props.setModoAlterar(false);
             }
             else {
                 //cadastrar produto
-                props.setListaDeProdutos([...props.listaProdutos], produto);
-
+                props.setListaDeProdutos([...props.listaProdutos, produto]);
             }
             // exibir a tabela com o produto incluido/alterado
             props.setExibirTabela(true);
