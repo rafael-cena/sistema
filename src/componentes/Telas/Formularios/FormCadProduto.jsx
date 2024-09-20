@@ -23,12 +23,6 @@ export default function FormCadProduto(props) {
         if (form.checkValidity()) {
             if (props.modoAlterar) {
                 props.setListaDeProdutos(props.listaProdutos.map((item) => {
-                    // if (item.codigo !== props.produtoSelecionado.codigo) {
-                    //     return item;
-                    // }
-                    // else {
-                    //     return props.produtoSelecionado;
-                    // }
                     return item.codigo !== props.produtoSelecionado.codigo ? item : props.produtoSelecionado;
                 }));
                 props.setModoAlterar(false);

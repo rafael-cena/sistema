@@ -53,7 +53,7 @@ export default function TabelaProdutos(props) {
                                         <td>{produto.precoCusto}</td>
                                         <td>{produto.precoVenda}</td>
                                         <td>{produto.qtdEstoque}</td>
-                                        <td><img src={produto.urlImagem} alt="Imagem do produto" style={{ width: '30px' }} /></td>
+                                        <td><img src={produto.urlImagem} alt="Imagem do produto" title="Imagem ilustrativa, modelo conforme disponibilidade" style={{ width: '40px' }} /></td>
                                         <td>{produto.dataValidade}</td>
                                         <td>
                                             <Button onClick={() => { alterarProduto(produto) }} variant="warning">
