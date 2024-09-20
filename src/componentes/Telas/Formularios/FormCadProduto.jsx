@@ -75,7 +75,6 @@ export default function FormCadProduto(props) {
                         }
                         onChange={manipularMudanca}
                     />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="9">
                     <Form.Label>Descrição</Form.Label>
@@ -91,7 +90,6 @@ export default function FormCadProduto(props) {
                         }
                         onChange={manipularMudanca}
                     />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -109,7 +107,6 @@ export default function FormCadProduto(props) {
                         }
                         onChange={manipularMudanca}
                     />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group as={Col} md="3">
                     <Form.Label>Data de Validade</Form.Label>
@@ -125,7 +122,6 @@ export default function FormCadProduto(props) {
                         }
                         onChange={manipularMudanca}
                     />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
             </Row>
             <Row className="mb-3">
@@ -146,9 +142,6 @@ export default function FormCadProduto(props) {
                             }
                             onChange={manipularMudanca}
                         />
-                        <Form.Control.Feedback type="invalid">
-                            Please choose a username.
-                        </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
@@ -168,9 +161,6 @@ export default function FormCadProduto(props) {
                             }
                             onChange={manipularMudanca}
                         />
-                        <Form.Control.Feedback type="invalid">
-                            Please choose a username.
-                        </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
                 <Form.Group as={Col} md="4">
@@ -190,9 +180,6 @@ export default function FormCadProduto(props) {
                             }
                             onChange={manipularMudanca}
                         />
-                        <Form.Control.Feedback type="invalid">
-                            Please choose a username.
-                        </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
             </Row>
