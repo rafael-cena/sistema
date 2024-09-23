@@ -12,16 +12,8 @@ export default function TabelaProdutos(props) {
 
     function alterarProduto(produto) {
         props.setModoAlterar(true);
+        props.setProdutoSelecionado(produto);
         props.setExibirTabela(false);
-        props.setProdutoSelecionado({
-            codigo: produto.codigo,
-            descricao: produto.descricao,
-            precoCusto: produto.precoCusto,
-            precoVenda: produto.precoVenda,
-            qtdEstoque: produto.qtdEstoque,
-            urlImagem: produto.urlImagem,
-            dataValidade: produto.dataValidade
-        });
     }
 
     return (
@@ -74,6 +66,7 @@ export default function TabelaProdutos(props) {
                         }
                     </tbody>
                 </Table>
+                <p>Quantidade de produtos cadastrados: {props.listaProdutos.length}</p>
             </Container>
         </>
     );

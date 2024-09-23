@@ -6,15 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
 export default function FormCadProduto(props) {
-    const [produto, setProduto] = useState({
-        codigo: 0,
-        descricao: "",
-        precoCusto: 0,
-        precoVenda: 0,
-        qtdEstoque: 0,
-        urlImagem: "",
-        dataValidade: ""
-    });
+    const [produto, setProduto] = useState(props.produtoSelecionado);
 
     const [validated, setFormValidated] = useState(false);
 
