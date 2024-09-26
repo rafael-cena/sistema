@@ -25,6 +25,7 @@ export default function FormCadFornecedor(props) {
                     return item.codigo !== props.fornecedorSelecionado.codigo ? item : props.fornecedorSelecionado;
                 }));
                 props.setModoAlterar(false);
+                props.setFornecedorSelecionado({codigo: 0, descricao: "", cnpj: "", cidade: "", endereco: "", cep: "", prazoEntrega: ""});
             }
             else {
                 props.setListaDeFornecedores([...props.listaFornecedores, fornecedor]);
@@ -146,6 +147,7 @@ export default function FormCadFornecedor(props) {
                                 props.fornecedorSelecionado.cep :
                                 fornecedor.cep
                         }
+                        onChange={manipularMudanca}
                     />
                 </Form.Group>
                 <Form.Group as={Col} md="2" controlId="validationCustom01">

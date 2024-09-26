@@ -1,19 +1,27 @@
 import { Button, Container, Table } from "react-bootstrap";
 
-export default function TabelaClientes(props) {
+export default function TabelaEntregador(props) {
 
-    function excluirCliente(cliente) {
-        if (window.confirm("Deseja realmente excluir o cliente " + cliente.nome)) {
-            props.setListaDeClientes(props.listaClientes.filter((cli) => {
-                return cli.cpf !== cliente.cpf;
+    function excluirEntregador(entregador) {
+        if (window.confirm("Deseja realmente excluir o produto " + entregador.cpf)) {
+            props.setListaDeEntregador(props.listaEntregador.filter((item) => {
+                return item.cpf !== entregador.cpf;
             }));
         }
     }
 
-    function alterarCliente(cliente) {
+    function alterarEntregador(entregador) {
         props.setModoAlterar(true);
-        props.setClienteSelecionado(cliente);
         props.setExibirTabela(false);
+        props.setEntregadorSelecionado({
+            cpf: entregador.cpf,
+            telefone: entregador.telefone,
+            nome: entregador.nome,
+            sobrenome: entregador.sobrenome,
+            endereco: entregador.endereco,
+            dataNascimento: entregador.dataNascimento,
+            placaVeiculo: entregador.placaVeiculo
+        });
     }
 
     return (
@@ -24,36 +32,36 @@ export default function TabelaClientes(props) {
                 </Button>
                 <Table striped bordered hover>
                     <thead>
-                        <th>Nome</th>
                         <th>CPF</th>
-                        <th>Endereço</th>
-                        <th>CEP</th>
                         <th>Telefone</th>
-                        <th>Email</th>
+                        <th>Nome</th>
+                        <th>Sobrenome</th>
+                        <th>Endereço</th>
                         <th>Data de Nascimento</th>
+                        <th>Placa do Veículo</th>
                         <th>Ações</th>
                     </thead>
 
                     <tbody>
                         {
                             // ? -> verifica se é valido, se for executa
-                            props.listaClientes?.map((cliente) => {
+                            props.listaEntregador?.map((entregador) => {
                                 return (
                                     <tr>
-                                        <td>{cliente.nome}</td>
-                                        <td>{cliente.cpf}</td>
-                                        <td>{cliente.endereco}</td>
-                                        <td>{cliente.cep}</td>
-                                        <td>{cliente.telefone}</td>
-                                        <td>{cliente.email}</td>
-                                        <td>{cliente.dataNascimento}</td>
+                                        <td>{entregador.cpf}</td>
+                                        <td>{entregador.telefone}</td>
+                                        <td>{entregador.nome}</td>
+                                        <td>{entregador.sobrenome}</td>
+                                        <td>{entregador.endereco}</td>
+                                        <td>{entregador.dataNascimento}</td>
+                                        <td>{entregador.placaVeiculo}</td>
                                         <td>
-                                            <Button onClick={() => { alterarCliente(cliente) }} variant="warning">
+                                            <Button onClick={() => { alterarEntregador(entregador) }} variant="warning">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                                 </svg>
-                                            </Button> <Button onClick={() => { excluirCliente(cliente) }} variant="danger">
+                                            </Button> <Button onClick={() => { excluirEntregador(entregador) }} variant="danger">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
@@ -66,7 +74,7 @@ export default function TabelaClientes(props) {
                         }
                     </tbody>
                 </Table>
-                <p>Quantidade de clientes cadastrados: {props.listaClientes.length}</p>
+                <p>Quantidade de entregadores cadastrados: {props.listaEntregador.length}</p>
             </Container>
         </>
     );

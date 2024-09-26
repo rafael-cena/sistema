@@ -14,8 +14,9 @@ export default function FormCadCliente(props) {
         if (form.checkValidity()) {
             if (props.modoAlterar) {
                 props.setListaDeClientes(props.listaClientes.map((cli) => {
-                    return cli.id !== props.clienteSelecionado.id ? cli : props.clienteSelecionado;
+                    return cli.cpf !== props.clienteSelecionado.cpf ? cli : props.clienteSelecionado;
                 }));
+                props.setClienteSelecionado({nome: "", cpf: "", endereco: "", cep: "", telefone: "", email: "", dataNascimento: ""});
                 props.setModoAlterar(false);
             }
             else {
@@ -116,7 +117,7 @@ export default function FormCadCliente(props) {
             <Row className="mb-3">
                 <Form.Group as={Col} md="3" controlId="validationCustom03">
                     <Form.Label>Telefone</Form.Label>
-                    <Form.Control 
+                    <Form.Control
                         required
                         type='text'
                         id='telefone'
@@ -129,7 +130,7 @@ export default function FormCadCliente(props) {
                         onChange={manipularMudanca}
                     />
                 </Form.Group>
-                <Form.Group as={Col} md="9" controlId="validationCustom04">
+                <Form.Group as={Col} md="7" controlId="validationCustom04">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                         required
@@ -144,8 +145,34 @@ export default function FormCadCliente(props) {
                         onChange={manipularMudanca}
                     />
                 </Form.Group>
+                <Form.Group as={Col} md="2" controlId="validationCustom04">
+                    <Form.Label>Data de Nascimento</Form.Label>
+                    <Form.Control
+                        required
+                        type='date'
+                        id='dataNascimento'
+                        name='dataNascimento'
+                        value={
+                            props.modoAlterar ?
+                                props.clienteSelecionado.dataNascimento :
+                                cliente.dataNascimento
+                        }
+                        onChange={manipularMudanca}
+                    />
+                </Form.Group>
             </Row>
-            <Button type="submit">Cadastrar</Button>
+            <Row className='mt-2 mb-2'>
+                <Col md={1}>
+                    {
+                        props.modoAlterar ?
+                            <Button type="submit">Alterar</Button> :
+                            <Button type="submit">Cadastrar</Button>
+                    }
+                </Col>
+                <Col md={{ offset: 1 }}>
+                    <Button onClick={() => { props.setExibirTabela(true); }}>Voltar</Button>
+                </Col>
+            </Row>
         </Form>
     )
 }

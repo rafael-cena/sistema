@@ -1,19 +1,21 @@
 export const clientes = [
     {
-        "nome": "Alfredo Geffrei",
+        "nome": "Alfredo Bueno",
         "cpf": "123654789-01",
         "endereco": "Rua Dois, 192",
         "cep": "18885-704",
         "telefone": "(18) 99885-7447",
-        "email": "alfGeffrei@gmail.com"
+        "email": "alfredobueno89@gmail.com",
+        "dataNascimento": "1989-06-14"
     },
     {
-        "nome": "Salmonela",
+        "nome": "Cláudia Torres",
         "cpf": "123159357-85",
-        "endereco": "Avenida Adineva, 767",
+        "endereco": "Avenida adineva, 767",
         "cep": "19066-087",
         "telefone": "(18) 3822-2585",
-        "email": "salmonelanapassarela@uol.com.br"
+        "email": "clau_torres@uol.com.br",
+        "dataNascimento": "1999-04-21"
     },
     {
         "nome": "Castelo Branco",
@@ -21,9 +23,10 @@ export const clientes = [
         "endereco": "Avenida Castelo Branco, 7",
         "cep": "19665-321",
         "telefone": "(18) 2128-6657",
-        "email": "castelBr@gov.br"
+        "email": "casteloBr@gov.br",
+        "dataNascimento": "1967-01-02"
     }
-]
+];
 
 /*
     {
@@ -32,6 +35,7 @@ export const clientes = [
         "endereco": "",
         "cep": "",
         "telefone": "",
-        "email": ""
+        "email": "",
+        "dataNascimento": ""
     }
 */

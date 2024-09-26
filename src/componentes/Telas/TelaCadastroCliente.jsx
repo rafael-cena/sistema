@@ -15,7 +15,8 @@ export default function TelaCadastroCliente(props) {
         endereco: "",
         cep: "",
         telefone: "",
-        email: ""
+        email: "",
+        dataNascimento: ""
     });
 
     return (

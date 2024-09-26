@@ -5,8 +5,16 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 
-export default function FormCadProduto(props) {
-    const [produto, setProduto] = useState(props.produtoSelecionado);
+export default function FormCadEntregador(props) {
+    const [entregador, setEntregador] = useState({
+        cpf: "",
+        telefone: "",
+        nome: "",
+        sobrenome: "",
+        endereco: "",
+        dataNascimento: "",
+        placaVeiculo: ""
+    });
 
     const [validated, setFormValidated] = useState(false);
 
@@ -14,17 +22,16 @@ export default function FormCadProduto(props) {
         const form = evento.currentTarget;
         if (form.checkValidity()) {
             if (props.modoAlterar) {
-                props.setListaDeProdutos(props.listaProdutos.map((item) => {
-                    return item.codigo !== props.produtoSelecionado.codigo ? item : props.produtoSelecionado;
+                props.setListaDeEntregador(props.listaEntregador.map((item) => {
+                    return item.cpf !== props.entregadorSelecionado.cpf ? item : props.entregadorSelecionado;
                 }));
                 props.setModoAlterar(false);
-                props.setProdutoSelecionado({codigo: 0, descricao: "", precoCusto: 0, precoVenda: 0, qtdEstoque: 0, urlImagem: "", dataValidade: ""});
             }
             else {
-                //cadastrar produto
-                props.setListaDeProdutos([...props.listaProdutos, produto]);
+                //cadastra entregador
+                props.setListaDeEntregador([...props.listaEntregador, entregador]);
             }
-            // exibir a tabela com o produto incluido/alterado
+            // exibir a tabela do produto incluido/alterado
             props.setExibirTabela(true);
         }
         else {
@@ -38,24 +45,24 @@ export default function FormCadProduto(props) {
         const elemento = evento.target.name;
         const valor = evento.target.value;
         if (props.modoAlterar) {
-            props.setProdutoSelecionado({ ...props.produtoSelecionado, [elemento]: valor });
+            props.setEntregadorSelecionado({ ...props.entregadorSelecionado, [elemento]: valor });
         }
         else {
-            setProduto({ ...produto, [elemento]: valor });
+            setEntregador({ ...entregador, [elemento]: valor });
         }
     }
-    // "..." é um operador de espalhamento
+    // "..." => Operador de Espalhamento
 
     return (
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
-                <Form.Group as={Col} md="3">
-                    <Form.Label>Codigo</Form.Label>
+                <Form.Group as={Col} md="4">
+                    <Form.Label>CPF</Form.Label>
                     <Form.Control
                         required
                         type="text"
-                        id="codigo"
-                        name="codigo"
+                        id="cpf"
+                        name="cpf"
                         disabled={
                             props.modoAlterar ?
                                 true :
@@ -63,116 +70,123 @@ export default function FormCadProduto(props) {
                         }
                         value={
                             props.modoAlterar ?
-                                props.produtoSelecionado.codigo :
-                                produto.codigo
+                                props.entregadorSelecionado.cpf :
+                                entregador.cpf
                         }
                         onChange={manipularMudanca}
                     />
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} md="9">
-                    <Form.Label>Descrição</Form.Label>
+                <Form.Group as={Col} md="4">
+                    <Form.Label>Nome</Form.Label>
                     <Form.Control
                         required
                         type="text"
-                        id="descricao"
-                        name="descricao"
+                        id="nome"
+                        name="nome"
                         value={
                             props.modoAlterar ?
-                                props.produtoSelecionado.descricao :
-                                produto.descricao
+                                props.entregadorSelecionado.nome :
+                                entregador.nome
                         }
                         onChange={manipularMudanca}
                     />
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                    <Form.Label>Sobrenome</Form.Label>
+                    <Form.Control
+                        required
+                        type="text"
+                        id="sobrenome"
+                        name="sobrenome"
+                        value={
+                            props.modoAlterar ?
+                                props.entregadorSelecionado.sobrenome :
+                                entregador.sobrenome
+                        }
+                        onChange={manipularMudanca}
+                    />
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
                 </Form.Group>
             </Row>
             <Row className="mb-3">
-                <Form.Group as={Col} md="9">
-                    <Form.Label>Url da imagem</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        id="urlImagem"
-                        name="urlImagem"
-                        value={
-                            props.modoAlterar ?
-                                props.produtoSelecionado.urlImagem :
-                                produto.urlImagem
-                        }
-                        onChange={manipularMudanca}
-                    />
-                </Form.Group>
                 <Form.Group as={Col} md="3">
-                    <Form.Label>Data de Validade</Form.Label>
+                    <Form.Label>Telefone</Form.Label>
                     <Form.Control
                         required
-                        type="date"
-                        id="dataValidade"
-                        name="dataValidade"
+                        type="text"
+                        id="telefone"
+                        name="telefone"
                         value={
                             props.modoAlterar ?
-                                props.produtoSelecionado.dataValidade :
-                                produto.dataValidade
+                                props.entregadorSelecionado.telefone :
+                                entregador.telefone
                         }
                         onChange={manipularMudanca}
                     />
+                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col} md="5">
+                    <Form.Label>Endereço</Form.Label>
+                    <InputGroup hasValidation>
+                        <Form.Control
+                            type="text"
+                            id="endereco"
+                            name="endereco"
+                            required
+                            value={
+                                props.modoAlterar ?
+                                    props.entregadorSelecionado.endereco :
+                                    entregador.endereco
+                            }
+                            onChange={manipularMudanca}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Please choose a username.
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                </Form.Group>
+                <Form.Group as={Col} md="4">
+                    <Form.Label>Data de Nascimento</Form.Label>
+                    <InputGroup hasValidation>
+                        <Form.Control
+                            type="text"
+                            id="dataNascimento"
+                            name="dataNascimento"
+                            required
+                            value={
+                                props.modoAlterar ?
+                                    props.entregadorSelecionado.dataNascimento :
+                                    entregador.dataNascimento
+                            }
+                            onChange={manipularMudanca}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Please choose a username.
+                        </Form.Control.Feedback>
+                    </InputGroup>
                 </Form.Group>
             </Row>
             <Row className="mb-3">
                 <Form.Group as={Col} md="4">
-                    <Form.Label>Preço de Custo</Form.Label>
+                    <Form.Label>Placa do Veiculo</Form.Label>
                     <InputGroup hasValidation>
-                        <InputGroup.Text id="inputGroupPrepend">R$</InputGroup.Text>
                         <Form.Control
                             type="text"
-                            id="precoCusto"
-                            name="precoCusto"
-                            aria-describedby="inputGroupPrepend"
+                            id="placaVeiculo"
+                            name="placaVeiculo"
                             required
                             value={
                                 props.modoAlterar ?
-                                    props.produtoSelecionado.precoCusto :
-                                    produto.precoCusto
+                                    props.entregadorSelecionado.placaVeiculo :
+                                    entregador.placaVeiculo
                             }
                             onChange={manipularMudanca}
                         />
-                    </InputGroup>
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                    <Form.Label>Preço de Venda</Form.Label>
-                    <InputGroup hasValidation>
-                        <InputGroup.Text id="inputGroupPrepend">R$</InputGroup.Text>
-                        <Form.Control
-                            type="text"
-                            id="precoVenda"
-                            name="precoVenda"
-                            aria-describedby="inputGroupPrepend"
-                            required
-                            value={
-                                props.modoAlterar ?
-                                    props.produtoSelecionado.precoVenda :
-                                    produto.precoVenda
-                            }
-                            onChange={manipularMudanca}
-                        />
-                    </InputGroup>
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                    <Form.Label>Estoque</Form.Label>
-                    <InputGroup hasValidation>
-                        <InputGroup.Text id="inputGroupPrepend">+</InputGroup.Text>
-                        <Form.Control
-                            type="number"
-                            id="qtdEstoque"
-                            name="qtdEstoque"
-                            aria-describedby="inputGroupPrepend"
-                            required
-                            value={
-                                props.modoAlterar ?
-                                    props.produtoSelecionado.qtdEstoque :
-                                    produto.qtdEstoque
-                            }
-                            onChange={manipularMudanca}
-                        />
+                        <Form.Control.Feedback type="invalid">
+                            Please choose a username.
+                        </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
             </Row>
