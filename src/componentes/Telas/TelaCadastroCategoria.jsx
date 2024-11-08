@@ -1,7 +1,25 @@
 import { Alert } from "react-bootstrap";
 import FormCadCategorias from "./Formularios/FormCadCategoria";
 import Pagina from "../layouts/Pagina";
-export default function TelaCadastroCategoria(props) {
+import { useEffect, useState } from "react";
+import TabelaCategorias from "./Tabelas/TabelaCategorias";
+import { consultarCategoria } from "../../servicos/servicoCategoria";
+
+export default function TelaCadastroCategoria() {
+    const [exibirTabela, setExibirTabela] = useState(true);
+    const [listaDeCategorias, setListaDeCategorias] = useState([]);
+    const [modoEdicao, setModoEdicao] = useState(false);
+    const [categoriaSelecionado, setCategoriaSelecionado] = useState({
+        codigo: 0,
+        descricao: ""
+    });
+
+    useEffect(() => {
+        consultarCategoria().then((lista) => {
+            setListaDeCategorias(lista);
+        })
+    }, [exibirTabela])
+
     return (
         <div>
             <Pagina>
@@ -10,8 +28,25 @@ export default function TelaCadastroCategoria(props) {
                         Cadastro de Categoria
                     </h2>
                 </Alert>
-                <FormCadCategorias />
+                {
+                    exibirTabela ?
+                        <TabelaCategorias listaDeCategorias={listaDeCategorias}
+                            setListaDeCategorias={setListaDeCategorias}
+                            setExibirTabela={setExibirTabela}
+                            setModoEdicao={setModoEdicao}
+                            setCategoriaSelecionado={setCategoriaSelecionado} /> :
+                        <FormCadCategorias listaDeCategorias={listaDeCategorias}
+                            setListaDeCategorias={setListaDeCategorias}
+                            setExibirTabela={setExibirTabela}
+                            categoriaSelecionado={categoriaSelecionado}
+                            setCategoriaSelecionado={setCategoriaSelecionado}
+                            modoEdicao={modoEdicao}
+                            setModoEdicao={setModoEdicao}
+
+                        />
+                }
             </Pagina>
         </div>
     );
+
 }

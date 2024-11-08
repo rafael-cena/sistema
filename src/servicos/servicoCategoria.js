@@ -24,7 +24,7 @@ export async function alterarCategoria (categoria) {
     return resultado;
 }
 
-export async function excluirCategoria (categoria) {
+export async function serviceExcluirCategoria (categoria) {
     const resposta = await fetch(urlBase+"/"+categoria.codigo, {
         'method': "DELETE",
     });

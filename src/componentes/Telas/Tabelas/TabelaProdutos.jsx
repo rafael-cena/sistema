@@ -14,6 +14,9 @@ export default function TabelaProdutos(props) {
         if(window.confirm("Deseja realmente excluir o produto " + produto.descricao)){
             serviceExcluirProduto(produto).then((resultado) => {
                 if (resultado.status) {
+                    props.setListaDeProdutos(props.listaDeProdutos.filter((item) => {
+                        return item.codigo !== produto.codigo;
+                    }))
                     toast.success(resultado.mensagem);
                 }
                 else {
