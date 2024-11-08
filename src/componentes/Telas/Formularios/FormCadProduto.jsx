@@ -1,193 +1,235 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
+import { Button, Spinner, Col, Form, InputGroup, Row } from 'react-bootstrap';
+import { useState, useEffect } from 'react';
+import { consultarCategoria } from '../../../servicos/servicoCategoria';
+import { alterarProduto, gravarProduto } from '../../../servicos/servicoProduto';
+import toast, { Toaster } from 'react-hot-toast';
 
-export default function FormCadProduto(props) {
+export default function FormCadProdutos(props) {
     const [produto, setProduto] = useState(props.produtoSelecionado);
+    const [formValidado, setFormValidado] = useState(false);
+    const [categorias, setCategorias] = useState([]);
+    const [temCategorias, setTemCategorias] = useState(false);
 
-    const [validated, setFormValidated] = useState(false);
+    useEffect(() => {
+        consultarCategoria().then((resultado) => {
+            if (Array.isArray(resultado)) {
+                setCategorias(resultado);
+                setTemCategorias(true);
+            }
+        }).catch((erro) => {
+            setTemCategorias(false);
+            toast.error("Não foi possivel carregar as categorias.");
+        });
 
-    function handleSubmit(evento) {
+    }, []);
+
+    function selecionarCategoria(evento) {
+        setProduto({ ...produto, categoria: { codigo: evento.currentTarget.value } })
+    }
+
+    function manipularSubmissao(evento) {
         const form = evento.currentTarget;
         if (form.checkValidity()) {
-            if (props.modoAlterar) {
-                props.setListaDeProdutos(props.listaProdutos.map((item) => {
-                    return item.codigo !== props.produtoSelecionado.codigo ? item : props.produtoSelecionado;
-                }));
-                props.setModoAlterar(false);
-                props.setProdutoSelecionado({codigo: 0, descricao: "", precoCusto: 0, precoVenda: 0, qtdEstoque: 0, urlImagem: "", dataValidade: ""});
+
+            if (!props.modoEdicao) {
+                //cadastrar o produto
+                gravarProduto(produto).then((resultado) => {
+                    if (resultado.status) {
+                        //exibir tabela com o produto incluído
+                        props.setExibirTabela(true);
+                    }
+                    else {
+                        toast.error(resultado.mensagem);
+                    }
+                });
             }
             else {
-                //cadastrar produto
-                props.setListaDeProdutos([...props.listaProdutos, produto]);
+                alterarProduto(produto).then((resultado) => {
+                    if (resultado.status) {
+                        toast.success(resultado.mensagem);
+                    }
+                    else {
+                        toast.error(resultado.mensagem);
+                    }
+                });
+
+                //voltar para o modo de inclusão
+                props.setModoEdicao(false);
+                props.setProdutoSelecionado({
+                    codigo: 0,
+                    descricao: "",
+                    precoCusto: 0,
+                    precoVenda: 0,
+                    qtdEstoque: 0,
+                    urlImagem: "",
+                    dataValidade: ""
+                });
+                props.setExibirTabela(true);
             }
-            // exibir a tabela com o produto incluido/alterado
-            props.setExibirTabela(true);
+
         }
         else {
-            setFormValidated(true);
+            setFormValidado(true);
         }
         evento.preventDefault();
         evento.stopPropagation();
+
     }
 
     function manipularMudanca(evento) {
         const elemento = evento.target.name;
         const valor = evento.target.value;
-        if (props.modoAlterar) {
-            props.setProdutoSelecionado({ ...props.produtoSelecionado, [elemento]: valor });
-        }
-        else {
-            setProduto({ ...produto, [elemento]: valor });
-        }
+        setProduto({ ...produto, [elemento]: valor });
     }
-    // "..." é um operador de espalhamento
 
     return (
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Row className="mb-3">
-                <Form.Group as={Col} md="3">
-                    <Form.Label>Codigo</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        id="codigo"
-                        name="codigo"
-                        disabled={
-                            props.modoAlterar ?
-                                true :
-                                false
-                        }
-                        value={
-                            props.modoAlterar ?
-                                props.produtoSelecionado.codigo :
-                                produto.codigo
-                        }
-                        onChange={manipularMudanca}
-                    />
-                </Form.Group>
-                <Form.Group as={Col} md="9">
-                    <Form.Label>Descrição</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        id="descricao"
-                        name="descricao"
-                        value={
-                            props.modoAlterar ?
-                                props.produtoSelecionado.descricao :
-                                produto.descricao
-                        }
-                        onChange={manipularMudanca}
-                    />
-                </Form.Group>
-            </Row>
-            <Row className="mb-3">
-                <Form.Group as={Col} md="9">
-                    <Form.Label>Url da imagem</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        id="urlImagem"
-                        name="urlImagem"
-                        value={
-                            props.modoAlterar ?
-                                props.produtoSelecionado.urlImagem :
-                                produto.urlImagem
-                        }
-                        onChange={manipularMudanca}
-                    />
-                </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Form.Label>Data de Validade</Form.Label>
-                    <Form.Control
-                        required
-                        type="date"
-                        id="dataValidade"
-                        name="dataValidade"
-                        value={
-                            props.modoAlterar ?
-                                props.produtoSelecionado.dataValidade :
-                                produto.dataValidade
-                        }
-                        onChange={manipularMudanca}
-                    />
-                </Form.Group>
-            </Row>
-            <Row className="mb-3">
-                <Form.Group as={Col} md="4">
-                    <Form.Label>Preço de Custo</Form.Label>
-                    <InputGroup hasValidation>
-                        <InputGroup.Text id="inputGroupPrepend">R$</InputGroup.Text>
+        <>
+            <Form noValidate validated={formValidado} onSubmit={manipularSubmissao}>
+                <Row className="mb-4">
+                    <Form.Group as={Col} md="4">
+                        <Form.Label>Código</Form.Label>
                         <Form.Control
+                            required
                             type="text"
-                            id="precoCusto"
-                            name="precoCusto"
-                            aria-describedby="inputGroupPrepend"
-                            required
-                            value={
-                                props.modoAlterar ?
-                                    props.produtoSelecionado.precoCusto :
-                                    produto.precoCusto
-                            }
+                            id="codigo"
+                            name="codigo"
+                            value={produto.codigo}
+                            disabled={props.modoEdicao}
                             onChange={manipularMudanca}
                         />
-                    </InputGroup>
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                    <Form.Label>Preço de Venda</Form.Label>
-                    <InputGroup hasValidation>
-                        <InputGroup.Text id="inputGroupPrepend">R$</InputGroup.Text>
+                        <Form.Control.Feedback type='invalid'>Por favor, informe o código do produto!</Form.Control.Feedback>
+                    </Form.Group>
+                </Row>
+                <Row className="mb-4">
+                    <Form.Group as={Col} md="12">
+                        <Form.Label>Descrição</Form.Label>
                         <Form.Control
+                            required
                             type="text"
-                            id="precoVenda"
-                            name="precoVenda"
-                            aria-describedby="inputGroupPrepend"
-                            required
-                            value={
-                                props.modoAlterar ?
-                                    props.produtoSelecionado.precoVenda :
-                                    produto.precoVenda
-                            }
+                            id="descricao"
+                            name="descricao"
+                            value={produto.descricao}
                             onChange={manipularMudanca}
                         />
-                    </InputGroup>
-                </Form.Group>
-                <Form.Group as={Col} md="4">
-                    <Form.Label>Estoque</Form.Label>
-                    <InputGroup hasValidation>
-                        <InputGroup.Text id="inputGroupPrepend">+</InputGroup.Text>
+                        <Form.Control.Feedback type="invalid">Por favor, informe a descrição do produto!</Form.Control.Feedback>
+                    </Form.Group>
+                </Row>
+                <Row className="mb-4">
+                    <Form.Group as={Col} md="4">
+                        <Form.Label>Preço de Custo:</Form.Label>
+                        <InputGroup hasValidation>
+                            <InputGroup.Text id="precoCusto">R$</InputGroup.Text>
+                            <Form.Control
+                                type="text"
+                                id="precoCusto"
+                                name="precoCusto"
+                                aria-describedby="precoCusto"
+                                value={produto.precoCusto}
+                                onChange={manipularMudanca}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Por favor, informe o preço de custo!
+                            </Form.Control.Feedback>
+                        </InputGroup>
+                    </Form.Group>
+                    <Form.Group as={Col} md="4">
+                        <Form.Label>Preço de Venda:</Form.Label>
+                        <InputGroup hasValidation>
+                            <InputGroup.Text id="precoVenda">R$</InputGroup.Text>
+                            <Form.Control
+                                type="text"
+                                id="precoVenda"
+                                name="precoVenda"
+                                aria-describedby="precoVenda"
+                                value={produto.precoVenda}
+                                onChange={manipularMudanca}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Por favor, informe o preço de venda!
+                            </Form.Control.Feedback>
+                        </InputGroup>
+                    </Form.Group>
+                    <Form.Group as={Col} md="4">
+                        <Form.Label>Qtd em estoque:</Form.Label>
+                        <InputGroup hasValidation>
+                            <InputGroup.Text id="qtdEstoque">+</InputGroup.Text>
+                            <Form.Control
+                                type="text"
+                                id="qtdEstoque"
+                                name="qtdEstoque"
+                                aria-describedby="qtdEstoque"
+                                value={produto.qtdEstoque}
+                                onChange={manipularMudanca}
+                                required
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                Por favor, informe a quantidade em estoque!
+                            </Form.Control.Feedback>
+                        </InputGroup>
+                    </Form.Group>
+                </Row>
+                <Row className="mb-4">
+                    <Form.Group as={Col} md="12">
+                        <Form.Label>Url da imagem:</Form.Label>
                         <Form.Control
-                            type="number"
-                            id="qtdEstoque"
-                            name="qtdEstoque"
-                            aria-describedby="inputGroupPrepend"
                             required
-                            value={
-                                props.modoAlterar ?
-                                    props.produtoSelecionado.qtdEstoque :
-                                    produto.qtdEstoque
-                            }
+                            type="text"
+                            id="urlImagem"
+                            name="urlImagem"
+                            value={produto.urlImagem}
                             onChange={manipularMudanca}
                         />
-                    </InputGroup>
-                </Form.Group>
-            </Row>
-            <Row className='mt-2 mb-2'>
-                <Col md={1}>
-                    {
-                        props.modoAlterar ?
-                            <Button type="submit">Alterar</Button> :
-                            <Button type="submit">Cadastrar</Button>
-                    }
-                </Col>
-                <Col md={{ offset: 1 }}>
-                    <Button onClick={() => { props.setExibirTabela(true); }}>Voltar</Button>
-                </Col>
-            </Row>
-        </Form>
+                        <Form.Control.Feedback type="invalid">Por favor, informe a url da imagem do produto!</Form.Control.Feedback>
+                    </Form.Group>
+                </Row>
+                <Row className="mb-4">
+                    <Form.Group as={Col} md="4">
+                        <Form.Label>Válido até:</Form.Label>
+                        <Form.Control
+                            required
+                            type="text"
+                            id="dataValidade"
+                            name="dataValidade"
+                            value={produto.dataValidade}
+                            onChange={manipularMudanca}
+                        />
+                        <Form.Control.Feedback type="invalid">Por favor, informe a data de validade do produto!</Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group as={Col} md={temCategorias ? 8 : 7}>
+                        <Form.Label>Categoria: </Form.Label>
+                        <Form.Select id='categoria' name='categoria' onChange={selecionarCategoria}>
+                            <option selected value={null} disabled>Selecione uma categoria</option>
+                            {   //criar em tempo de execucao as categorias existentes no banco de dados
+                                categorias.map((categoria) => {
+                                    return <option value={categoria.codigo}>
+                                        {categoria.descricao}
+                                    </option>
+                                })
+                            }
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group as={Col} md={1}>
+                        {
+                            temCategorias ? "" : <Spinner className='mt-4' animation="border" variant="success" />
+                        }
+                    </Form.Group>
+                </Row>
+                <Row className='mt-2 mb-2'>
+                    <Col md={1}>
+                        <Button type="submit" disabled={!temCategorias}>{props.modoEdicao ? "Alterar" : "Confirmar"}</Button>
+                    </Col>
+                    <Col md={{ offset: 1 }}>
+                        <Button onClick={() => {
+                            props.setExibirTabela(true);
+                        }}>Voltar</Button>
+                    </Col>
+                </Row>
+            </Form>
+            {
+                !temCategorias ? <Toaster position="top-right" reverseOrder={false}></Toaster> : ""
+            }
+        </>
     );
 }

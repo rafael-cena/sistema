@@ -1,9 +1,7 @@
-import Pagina from '../layouts/Pagina';
+import Pagina from "../layouts/Pagina";
 
-export default function TelaMenu (props) {
+export default function TelaMenu(props){
     return (
-        <Pagina>
-            
-        </Pagina >
+        <Pagina />
     );
 }
