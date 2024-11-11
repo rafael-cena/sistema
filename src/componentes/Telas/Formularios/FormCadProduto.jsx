@@ -62,7 +62,8 @@ export default function FormCadProdutos(props) {
                     precoVenda: 0,
                     qtdEstoque: 0,
                     urlImagem: "",
-                    dataValidade: ""
+                    dataValidade: "",
+                    categoria: {}
                 });
                 props.setExibirTabela(true);
             }
@@ -199,7 +200,7 @@ export default function FormCadProdutos(props) {
                     </Form.Group>
                     <Form.Group as={Col} md={temCategorias ? 8 : 7}>
                         <Form.Label>Categoria: </Form.Label>
-                        <Form.Select id='categoria' name='categoria' onChange={selecionarCategoria}>
+                        <Form.Select id='categoria' name='categoria' value={produto.categoria} onChange={selecionarCategoria}>
                             <option selected value={null} disabled>Selecione uma categoria</option>
                             {   //criar em tempo de execucao as categorias existentes no banco de dados
                                 categorias.map((categoria) => {
