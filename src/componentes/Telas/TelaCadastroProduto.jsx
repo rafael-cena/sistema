@@ -3,11 +3,9 @@ import FormCadProdutos from "./Formularios/FormCadProduto";
 import Pagina from "../layouts/Pagina";
 import { useEffect, useState } from "react";
 import TabelaProdutos from "./Tabelas/TabelaProdutos";
-import { consultarProduto } from "../../servicos/servicoProduto";
 
 export default function TelaCadastroProduto() {
     const [exibirTabela, setExibirTabela] = useState(true);
-    const [listaDeProdutos, setListaDeProdutos] = useState([]);
     const [modoEdicao, setModoEdicao] = useState(false);
     const [produtoSelecionado, setProdutoSelecionado] = useState({
         codigo: 0,
@@ -36,19 +34,14 @@ export default function TelaCadastroProduto() {
                 </Alert>
                 {
                     exibirTabela ?
-                        <TabelaProdutos listaDeProdutos={listaDeProdutos}
-                            setListaDeProdutos={setListaDeProdutos}
-                            setExibirTabela={setExibirTabela}
+                        <TabelaProdutos setExibirTabela={setExibirTabela}
                             setModoEdicao={setModoEdicao}
                             setProdutoSelecionado={setProdutoSelecionado} /> :
-                        <FormCadProdutos listaDeProdutos={listaDeProdutos}
-                            setListaDeProdutos={setListaDeProdutos}
-                            setExibirTabela={setExibirTabela}
+                        <FormCadProdutos setExibirTabela={setExibirTabela}
                             produtoSelecionado={produtoSelecionado}
                             setProdutoSelecionado={setProdutoSelecionado}
                             modoEdicao={modoEdicao}
                             setModoEdicao={setModoEdicao}
-
                         />
                 }
             </Pagina>
