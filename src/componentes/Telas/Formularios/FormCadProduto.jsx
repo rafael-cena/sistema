@@ -95,7 +95,7 @@ export default function FormCadProdutos(props) {
                             id="codigo"
                             name="codigo"
                             value={produto.codigo}
-                            disabled={props.modoEdicao}
+                            disabled
                             onChange={manipularMudanca}
                         />
                         <Form.Control.Feedback type='invalid'>Por favor, informe o código do produto!</Form.Control.Feedback>
@@ -200,7 +200,7 @@ export default function FormCadProdutos(props) {
                     </Form.Group>
                     <Form.Group as={Col} md={temCategorias ? 8 : 7}>
                         <Form.Label>Categoria: </Form.Label>
-                        <Form.Select id='categoria' name='categoria' value={produto.categoria} onChange={selecionarCategoria}>
+                        <Form.Select id='categoria' name='categoria' value={produto.categoria.descricao} onChange={selecionarCategoria}>
                             <option selected value={null} disabled>Selecione uma categoria</option>
                             {   //criar em tempo de execucao as categorias existentes no banco de dados
                                 categorias.map((categoria) => {
