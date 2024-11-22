@@ -1,7 +1,7 @@
 import { Alert } from "react-bootstrap";
 import FormCadProdutos from "./Formularios/FormCadProduto";
 import Pagina from "../layouts/Pagina";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TabelaProdutos from "./Tabelas/TabelaProdutos";
 
 export default function TelaCadastroProduto() {
@@ -17,12 +17,6 @@ export default function TelaCadastroProduto() {
         dataValidade: "",
         categoria: {}
     });
-
-    useEffect(() => {
-        consultarProduto().then((lista) => {
-            setListaDeProdutos(lista);
-        })
-    }, [exibirTabela])
 
     return (
         <div>
