@@ -1,38 +1,38 @@
-const urlBase = 'https://backend-lp2.vercel.app/produtos';
+const urlBase = 'https://backend-lp2.vercel.app/usuarios';
 
-export async function gravarProduto (produto) {
+export async function gravarUsuario (usuario) {
     const resposta = await fetch(urlBase, {
         'method': "POST",
         'headers': {
             "Content-Type": "application/json"
         },
-        'body': JSON.stringify(produto)
+        'body': JSON.stringify(usuario)
     });
     const resultado = await resposta.json();
     return resultado;
 }
 
-export async function alterarProduto (produto) {
-    const resposta = await fetch(urlBase+"/"+produto.codigo, {
-        'method': "PATCH",
+export async function alterarUsuario (usuario) {
+    const resposta = await fetch(urlBase+"/"+usuario.codigo, {
+        'method': "PUT",
         'headers': {
             "Content-Type": "application/json"
         },
-        'body': JSON.stringify({...produto, dataValidade: new Date(produto.dataValidade).toLocaleDateString()})
+        'body': JSON.stringify(usuario)
     });
     const resultado = await resposta.json();
     return resultado;
 }
 
-export async function serviceExcluirProduto (produto) {
-    const resposta = await fetch(urlBase+"/"+produto.codigo, {
+export async function serviceExcluirUsuario (usuario) {
+    const resposta = await fetch(urlBase+"/"+usuario.codigo, {
         'method': "DELETE",
     });
     const resultado = await resposta.json();
     return resultado;
 }
 
-export async function consultarProduto () {
+export async function consultarUsuario () {
     const resposta = await fetch(urlBase, {
         'method': "GET",
     });

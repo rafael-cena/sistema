@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import ESTADO from "./estados";
-import { consultarProduto, serviceExcluirProduto } from "../servicos/servicoProduto";
+import { alterarProduto, consultarProduto, gravarProduto, serviceExcluirProduto } from "../servicos/servicoProduto";
 
 export const buscarProdutos = createAsyncThunk('buscarProdutos', async () => {
     //lista de produtos
@@ -39,8 +39,54 @@ export const apagarProduto = createAsyncThunk('apagarProduto', async (produto) =
     try {
         return {
             "status": resultado.status,
-            "mensagem": resultado.mensagem
+            "mensagem": resultado.mensagem,
+            "codigo": produto.codigo
         }
+    }
+    catch (e) {
+        return {
+            "status": false,
+            "mensagem": "Erro: " + e.message
+        }
+    }
+})
+
+export const editarProduto = createAsyncThunk('editarProduto', async (produto) => {
+    const resultado = await alterarProduto(produto);
+    try {
+        produto.codigo = resultado.codigo;
+        return {
+            "status": resultado.status,
+            "mensagem": resultado.mensagem,
+            "produto": produto
+        }
+
+    }
+    catch (e) {
+        return {
+            "status": false,
+            "mensagem": "Erro: " + e.message
+        }
+    }
+})
+
+export const registrarProduto = createAsyncThunk('registrarProduto', async (produto) => {
+    const resultado = await gravarProduto(produto);
+    try {
+        if (resultado.status) {
+            produto.codigo = resultado.codigo;
+            return {
+                "status": resultado.status,
+                "mensagem": resultado.mensagem,
+                "produto": produto
+            }
+        }
+        else
+            return {
+                "status": resultado.status,
+                "mensagem": resultado.mensagem,
+            }
+
     }
     catch (e) {
         return {
@@ -82,14 +128,55 @@ const produtoReducer = createSlice({
             })
             .addCase(apagarProduto.pending, (state, action) => {
                 state.estado = ESTADO.PENDENTE;
-                state.mensagem = action.payload?.mensagem;
+                state.mensagem = "Processando a requisição";
             })
             .addCase(apagarProduto.fulfilled, (state, action) => {
-                state.estado = ESTADO.OCIOSO;
+                if (action.payload.status) {
+                    state.estado = ESTADO.OCIOSO;
+                    state.listaDeProdutos = state.listaDeProdutos.filter((item) => item.codigo !== action.payload.codigo);
+                }
+                else {
+                    state.estado = ESTADO.ERRO;
+                }
                 state.mensagem = action.payload?.mensagem;
-                //altera a lista de produtos?
             })
             .addCase(apagarProduto.rejected, (state, action) => {
+                state.estado = ESTADO.ERRO;
+                state.mensagem = action.payload?.mensagem;
+            })
+            .addCase(editarProduto.pending, (state, action) => {
+                state.estado = ESTADO.PENDENTE;
+                state.mensagem = "Processando a requisição";
+            })
+            .addCase(editarProduto.fulfilled, (state, action) => {
+                state.mensagem = action.payload.mensagem;
+                if (action.payload.status) {
+                    state.estado = ESTADO.OCIOSO;
+                    state.listaDeProdutos.map((item) => item.codigo === action.payload.produto.codigo ? action.payload.produto : item);
+                }
+                else {
+                    state.estado = ESTADO.ERRO;
+                }
+            })
+            .addCase(editarProduto.rejected, (state, action) => {
+                state.estado = ESTADO.ERRO;
+                state.mensagem = action.payload?.mensagem;
+            })
+            .addCase(registrarProduto.pending, (state, action) => {
+                state.estado = ESTADO.PENDENTE;
+                state.mensagem = "Processando a requisição";
+            })
+            .addCase(registrarProduto.fulfilled, (state, action) => {
+                state.mensagem = action.payload.mensagem;
+                if (action.payload.status) {
+                    state.estado = ESTADO.OCIOSO;
+                    state.listaDeProdutos.push(action.payload.produto);
+                }
+                else {
+                    state.estado = ESTADO.ERRO;
+                }
+            })
+            .addCase(registrarProduto.rejected, (state, action) => {
                 state.estado = ESTADO.ERRO;
                 state.mensagem = action.payload?.mensagem;
             })

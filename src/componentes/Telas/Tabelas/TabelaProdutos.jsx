@@ -1,10 +1,8 @@
 import { Alert, Button, Container, Spinner, Table } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
-import { serviceExcluirProduto } from "../../../servicos/servicoProduto";
 import { useSelector, useDispatch } from "react-redux";
 import { apagarProduto, buscarProdutos } from "../../../redux/produtoReducer.js";
 import { useEffect } from "react";
-
 import ESTADO from "../../../redux/estados";
 
 export default function TabelaProdutos(props) {
@@ -18,7 +16,7 @@ export default function TabelaProdutos(props) {
 
     function editarProduto(produto) {
         props.setModoEdicao(true);
-        props.setProdutoSelecionado(produto)
+        props.setProdutoSelecionado(produto);
         props.setExibirTabela(false);
     }
 
