@@ -1,6 +1,5 @@
 import { Button, Spinner, Col, Form, InputGroup, Row, Alert } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-import { consultarCategoria } from '../../../servicos/servicoCategoria';
 import toast, { Toaster } from 'react-hot-toast';
 import { editarProduto, registrarProduto } from '../../../redux/produtoReducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,26 +8,24 @@ import ESTADO from '../../../redux/estados';
 export default function FormCadProdutos(props) {
     //recuperar o estado da aplicacao / fatia produto                        // ↬ produto nomeado na store
     const { estado, mensagem, listaDeProdutos } = useSelector((state) => state.produto);
-    //const { estadoC, mensagemC, listaDeCategorias } = useSelector((state) => state.categoria);
+    const { estadoCat, mensagemCat, listaDeCategorias } = useSelector((state) => state.categoria);
     const despachante = useDispatch();
 
     const [produto, setProduto] = useState(props.produtoSelecionado);
     const [formValidado, setFormValidado] = useState(false);
-    const [categorias, setCategorias] = useState([]);
     const [temCategorias, setTemCategorias] = useState(false);
 
     useEffect(() => {
-        consultarCategoria().then((resultado) => {
-            if (Array.isArray(resultado)) {
-                setCategorias(resultado);
-                setTemCategorias(true);
-            }
-        }).catch((erro) => {
-            setTemCategorias(false);
-            toast.error("Não foi possivel carregar as categorias.");
-        });
-
-    }, []);
+        if (estadoCat === ESTADO.OCIOSO && listaDeCategorias.length > 0) {
+            setTemCategorias(true);
+            if (mensagemCat !== "")
+                toast.success(mensagemCat);
+        }
+        else if (estadoCat === ESTADO.PENDENTE)
+            toast(mensagemCat, {
+                icon: '⏳'
+            });
+    }, [estadoCat]);
 
     function selecionarCategoria(evento) {
         setProduto({ ...produto, categoria: { codigo: evento.currentTarget.value } })
@@ -221,7 +218,7 @@ export default function FormCadProdutos(props) {
                             <Form.Select id='categoria' name='categoria' value={produto.categoria.descricao} onChange={selecionarCategoria}>
                                 <option selected value={null} disabled>Selecione uma categoria</option>
                                 {   //criar em tempo de execucao as categorias existentes no banco de dados
-                                    categorias.map((categoria) => {
+                                    listaDeCategorias.map((categoria) => {
                                         return <option value={categoria.codigo}>
                                             {categoria.descricao}
                                         </option>

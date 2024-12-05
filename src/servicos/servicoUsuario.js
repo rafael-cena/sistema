@@ -1,5 +1,4 @@
-// const urlBase = 'https://backend-lp2.vercel.app/usuarios';
-const urlBase = 'http://localhost:4000/usuarios';
+const urlBase = 'https://backend-lp2.vercel.app/usuarios';
 
 export async function gravarUsuario (usuario) {
     const resposta = await fetch(urlBase, {
