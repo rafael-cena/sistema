@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Alert } from "react-bootstrap";
 import Pagina from '../layouts/Pagina';
 import TabelaUsuarios from "./Tabelas/TabelaUsuario";

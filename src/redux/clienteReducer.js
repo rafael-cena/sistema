@@ -8,24 +8,24 @@ export const buscarClientes = createAsyncThunk('buscarClientes', async () => {
     try {
         if (Array.isArray(resultado)) {
             return {
-                status: true,
-                mensagem: "Clientes recuperados com sucesso!",
-                listaDeClientes: resultado
+                "status": true,
+                "mensagem": "Clientes recuperados com sucesso!",
+                "listaDeClientes": resultado
             }
         }
         else {
             return {
-                status: false,
-                mensagem: "Erro ao recuperar clientes do backend!",
-                listaDeClientes: []
+                "status": false,
+                "mensagem": "Erro ao recuperar clientes do backend!",
+                "listaDeClientes": []
             }
         }
     }
     catch (e) {
         return {
-            status: false,
-            mensagem: "Erro " + e.message,
-            listaDeClientes: []
+            "status": false,
+            "mensagem": "Erro " + e.message,
+            "listaDeClientes": []
         }
     }
 })
@@ -35,22 +35,22 @@ export const apagarCliente = createAsyncThunk('apagarCliente', async (cliente) =
     try {
         if (resultado.status) {
             return {
-                status: resultado.status,
-                mensagem: resultado.mensagem,
-                id: cliente.id
+                "status": resultado.status,
+                "mensagem": resultado.mensagem,
+                "id": cliente.id
             }
         }
         else {
             return {
-                status: resultado.status,
-                mensagem: resultado.mensagem
+                "status": resultado.status,
+                "mensagem": resultado.mensagem
             }
         }
     }
     catch (e) {
         return {
-            status: false,
-            mensagem: "Erro: " + e.message
+            "status": false,
+            "mensagem": "Erro: " + e.message
         }
     }
 });
@@ -59,15 +59,15 @@ export const editarCliente = createAsyncThunk('editarCliente', async (cliente) =
     const resultado = await alterarCliente(cliente);
     try {
         return {
-            status: resultado.status,
-            mensagem: resultado.mensagem,
-            cliente: cliente
+            "status": resultado.status,
+            "mensagem": resultado.mensagem,
+            "cliente": cliente
         }
     }
     catch (e) {
         return {
-            status: false,
-            mensagem: "Erro: " + e.message
+            "status": false,
+            "mensagem": "Erro: " + e.message
         }
     }
 });
@@ -78,22 +78,22 @@ export const registrarCliente = createAsyncThunk('registrarCliente', async (clie
         if (resultado.status) {
             cliente.id = resultado.id;
             return {
-                status: resultado.status,
-                mensagem: resultado.mensagem,
-                cliente: cliente
+                "status": resultado.status,
+                "mensagem": resultado.mensagem,
+                "cliente": cliente
             }
         }
         else
             return {
-                status: resultado.status,
-                mensagem: resultado.mensagem,
+                "status": resultado.status,
+                "mensagem": resultado.mensagem,
             }
 
     }
     catch (e) {
         return {
-            status: false,
-            mensagem: "Erro: " + e.message
+            "status": false,
+            "mensagem": "Erro: " + e.message
         }
     }
 });
@@ -103,7 +103,7 @@ const clienteReducer = createSlice({
     initialState: {
         estadoCli: ESTADO.OCIOSO,
         mensagemCli: "",
-        listaDeclientes: []
+        listaDeClientes: []
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -114,19 +114,19 @@ const clienteReducer = createSlice({
             .addCase(buscarClientes.fulfilled, (state, action) => {
                 if (action.payload.status) {
                     state.estadoCli = ESTADO.OCIOSO;
-                    state.mensagemCli = action.payload?.mensagem;
-                    state.listaDeclientes = action.payload?.listaDeClientes;
+                    state.mensagemCli = action.payload?.mensagem;                    
+                    state.listaDeClientes = action.payload?.listaDeClientes;
                 }
                 else {
                     state.estadoCli = ESTADO.ERRO;
                     state.mensagemCli = action.payload?.mensagem;
-                    state.listaDeclientes = action.payload?.listaDeClientes;
+                    state.listaDeClientes = action.payload?.listaDeClientes;
                 }
             })
             .addCase(buscarClientes.rejected, (state, action) => {
                 state.estadoCli = ESTADO.ERRO;
                 state.mensagemCli = action.payload?.mensagem;
-                state.listaDeclientes = action.payload?.listaDeClientes;
+                state.listaDeClientes = action.payload?.listaDeClientes;
             })
             .addCase(apagarCliente.pending, (state, action) => {
                 state.estadoCli = ESTADO.PENDENTE;
@@ -136,7 +136,7 @@ const clienteReducer = createSlice({
                 if (action.payload.status) {
                     state.estadoCli = ESTADO.OCIOSO;
                     state.mensagemCli = action.payload?.mensagem;
-                    state.listaDeclientes = state.listaDeclientes.filter((item) => item.id !== action.payload.id);
+                    state.listaDeClientes = state.listaDeClientes.filter((item) => item.id !== action.payload.id);
                 }
                 else {
                     state.estadoCli = ESTADO.ERRO;
@@ -155,7 +155,7 @@ const clienteReducer = createSlice({
                 if (action.payload.status) {
                     state.estadoCli = ESTADO.OCIOSO;
                     state.mensagemCli = action.payload?.mensagem;
-                    state.listaDeclientes = state.listaDeclientes.map((item) => item.id === action.payload.cliente.id ? action.payload.cliente : item);
+                    state.listaDeClientes = state.listaDeClientes.map((item) => item.id === action.payload.cliente.id ? action.payload.cliente : item);
                 }
                 else {
                     state.estadoCli = ESTADO.ERRO;
@@ -174,7 +174,7 @@ const clienteReducer = createSlice({
                 if (action.payload.status) {
                     state.estadoCli = ESTADO.OCIOSO;
                     state.mensagemCli = action.payload?.mensagem;
-                    state.listaDeclientes.push(action.payload.cliente);
+                    state.listaDeClientes.push(action.payload.cliente);
                 }
                 else {
                     state.estadoCli = ESTADO.ERRO;

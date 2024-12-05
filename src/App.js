@@ -8,6 +8,7 @@ import { useState, createContext } from "react";
 import store from "./redux/store";
 import { Provider } from "react-redux"; //por meio do provedor os componentes terao acesso ao estado da aplicacao
 import TelaCadastroUsuario from "./componentes/Telas/TelaCadastroUsuario";
+import TelaCadastroCliente from "./componentes/Telas/TelaCadastroCliente";
 
 export const ContextoUsuario = createContext()
 
@@ -38,6 +39,9 @@ function App() {
                 <Route path="/produto" element={<TelaCadastroProduto />} />
                 <Route path="/categoria" element={<TelaCadastroCategoria />} />
                 <Route path="/usuario" element={<TelaCadastroUsuario />} />
+                <Route path="/cliente" element={<TelaCadastroCliente />} />
+
+                
                 <Route path="/" element={<TelaMenu />} />
                 <Route path="*" element={<Tela404 />} />
               </Routes>

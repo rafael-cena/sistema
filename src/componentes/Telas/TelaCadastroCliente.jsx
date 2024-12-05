@@ -1,13 +1,11 @@
-import FormCadCliente from "./Formularios/FormCadCliente";
-import Pagina from '../layouts/Pagina';
-import { Alert } from "react-bootstrap";
-import TabelaClientes from "./Tabelas/TabelaClientes";
 import { useState } from "react";
-import { clientes } from '../../dados/mockClientes';
+import { Alert } from "react-bootstrap";
+import Pagina from '../layouts/Pagina';
+import TabelaClientes from "./Tabelas/TabelaClientes";
+import FormCadCliente from "./Formularios/FormCadCliente";
 
 export default function TelaCadastroCliente(props) {
     const [exibirTabela, setExibirTabela] = useState(true);
-    const [listaDeClientes, setListaDeClientes] = useState(clientes);
     const [modoAlterar, setModoAlterar] = useState(false);
     const [clienteSelecionado, setClienteSelecionado] = useState({
         id: "",
@@ -17,7 +15,9 @@ export default function TelaCadastroCliente(props) {
         endereco: "",
         numero: 0,
         telefone: "",
-        usuario: ""
+        usuario: {
+            username: ""
+        }
     });
 
     return (

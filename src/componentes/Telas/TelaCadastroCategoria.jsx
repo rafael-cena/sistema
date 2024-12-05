@@ -1,24 +1,16 @@
+import { useState } from "react";
 import { Alert } from "react-bootstrap";
-import FormCadCategorias from "./Formularios/FormCadCategoria";
 import Pagina from "../layouts/Pagina";
-import { useEffect, useState } from "react";
 import TabelaCategorias from "./Tabelas/TabelaCategorias";
-import { consultarCategoria } from "../../servicos/servicoCategoria";
+import FormCadCategorias from "./Formularios/FormCadCategoria";
 
 export default function TelaCadastroCategoria() {
     const [exibirTabela, setExibirTabela] = useState(true);
-    const [listaDeCategorias, setListaDeCategorias] = useState([]);
     const [modoEdicao, setModoEdicao] = useState(false);
     const [categoriaSelecionado, setCategoriaSelecionado] = useState({
         codigo: 0,
         descricao: ""
     });
-
-    useEffect(() => {
-        consultarCategoria().then((lista) => {
-            setListaDeCategorias(lista);
-        })
-    }, [exibirTabela])
 
     return (
         <div>
@@ -30,14 +22,10 @@ export default function TelaCadastroCategoria() {
                 </Alert>
                 {
                     exibirTabela ?
-                        <TabelaCategorias listaDeCategorias={listaDeCategorias}
-                            setListaDeCategorias={setListaDeCategorias}
-                            setExibirTabela={setExibirTabela}
+                        <TabelaCategorias setExibirTabela={setExibirTabela}
                             setModoEdicao={setModoEdicao}
                             setCategoriaSelecionado={setCategoriaSelecionado} /> :
-                        <FormCadCategorias listaDeCategorias={listaDeCategorias}
-                            setListaDeCategorias={setListaDeCategorias}
-                            setExibirTabela={setExibirTabela}
+                        <FormCadCategorias setExibirTabela={setExibirTabela}
                             categoriaSelecionado={categoriaSelecionado}
                             setCategoriaSelecionado={setCategoriaSelecionado}
                             modoEdicao={modoEdicao}

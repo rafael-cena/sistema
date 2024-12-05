@@ -1,4 +1,5 @@
 const urlBase = 'https://backend-lp2.vercel.app/clientes';
+// const urlBase = 'http://localhost:4000/clientes';
 
 export async function gravarCliente (cliente) {
     const resposta = await fetch(urlBase, {
@@ -13,7 +14,7 @@ export async function gravarCliente (cliente) {
 }
 
 export async function alterarCliente (cliente) {
-    const resposta = await fetch(urlBase+"/"+cliente.codigo, {
+    const resposta = await fetch(urlBase+"/"+cliente.id, {
         'method': "PUT",
         'headers': {
             "Content-Type": "application/json"
@@ -25,7 +26,7 @@ export async function alterarCliente (cliente) {
 }
 
 export async function removerCliente (cliente) {
-    const resposta = await fetch(urlBase+"/"+cliente.codigo, {
+    const resposta = await fetch(urlBase+"/"+cliente.id, {
         'method': "DELETE",
     });
     const resultado = await resposta.json();
