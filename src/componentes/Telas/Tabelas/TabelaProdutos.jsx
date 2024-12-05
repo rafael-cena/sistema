@@ -26,22 +26,22 @@ export default function TabelaProdutos(props) {
         }
     }
 
-    if (estado === ESTADO.PENDENTE){
+    if (estado === ESTADO.PENDENTE) {
         return (
             <>
                 <Spinner className='mt-4' animation="border" variant="success" />
-                <Alert variant="primary">{ mensagem }</Alert>
+                <Alert variant="primary">{mensagem}</Alert>
             </>
         );
     }
-    else if (estado === ESTADO.ERRO){
+    else if (estado === ESTADO.ERRO) {
         return (
             <>
-                <Alert variant="danger">{ mensagem }</Alert>
+                <Alert variant="danger">{mensagem}</Alert>
             </>
         );
     }
-    else if (estado === ESTADO.OCIOSO){
+    else if (estado === ESTADO.OCIOSO) {
         return (
             <>
                 <Container>

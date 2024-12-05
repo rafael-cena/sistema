@@ -10,13 +10,14 @@ export default function TelaCadastroCliente(props) {
     const [listaDeClientes, setListaDeClientes] = useState(clientes);
     const [modoAlterar, setModoAlterar] = useState(false);
     const [clienteSelecionado, setClienteSelecionado] = useState({
+        id: "",
         nome: "",
         cpf: "",
-        endereco: "",
         cep: "",
+        endereco: "",
+        numero: 0,
         telefone: "",
-        email: "",
-        dataNascimento: ""
+        usuario: ""
     });
 
     return (
@@ -26,13 +27,11 @@ export default function TelaCadastroCliente(props) {
             </Alert>
             {
                 exibirTabela ? 
-                <TabelaClientes listaClientes={listaDeClientes} setListaDeClientes={setListaDeClientes} 
-                                setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
+                <TabelaClientes setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
                                 setClienteSelecionado={setClienteSelecionado} /> :
-                <FormCadCliente listaClientes={listaDeClientes} setListaDeClientes={setListaDeClientes}
-                                setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
-                                modoAlterar={modoAlterar} 
-                                setClienteSelecionado={setClienteSelecionado} clienteSelecionado={clienteSelecionado} />
+                <FormCadCliente setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
+                                modoAlterar={modoAlterar} setClienteSelecionado={setClienteSelecionado}
+                                clienteSelecionado={clienteSelecionado} />
             }
         </Pagina>
     );

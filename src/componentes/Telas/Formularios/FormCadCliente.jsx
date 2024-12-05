@@ -5,6 +5,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
 export default function FormCadCliente(props) {
+    const { estadoC, mensagemC, listaClientes } = useSelector((state) => state.cliente);
+
     const [cliente, setCliente] = useState(props.clienteSelecionado);
 
     const [validated, setValidated] = useState(false);
@@ -16,7 +18,16 @@ export default function FormCadCliente(props) {
                 props.setListaDeClientes(props.listaClientes.map((cli) => {
                     return cli.cpf !== props.clienteSelecionado.cpf ? cli : props.clienteSelecionado;
                 }));
-                props.setClienteSelecionado({nome: "", cpf: "", endereco: "", cep: "", telefone: "", email: "", dataNascimento: ""});
+                props.setClienteSelecionado({
+                    id: "",
+                    nome: "",
+                    cpf: "",
+                    cep: "",
+                    endereco: "",
+                    numero: 0,
+                    telefone: "",
+                    usuario: ""
+                });
                 props.setModoAlterar(false);
             }
             else {
@@ -45,23 +56,19 @@ export default function FormCadCliente(props) {
     return (
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Row className="mb-3">
-                <Form.Group as={Col} md="6" controlId="validationCustom01">
+                <Form.Group as={Col} md="8" controlId="validationCustom01">
                     <Form.Label>Nome</Form.Label>
                     <Form.Control
                         required
                         type="text"
                         id="nome"
                         name="nome"
-                        value={
-                            props.modoAlterar ?
-                                props.clienteSelecionado.nome :
-                                cliente.nome
-                        }
+                        value={cliente.nome}
                         onChange={manipularMudanca}
                     />
 
                 </Form.Group>
-                <Form.Group as={Col} md="6" controlId="validationCustom02">
+                <Form.Group as={Col} md="4" controlId="validationCustom02">
                     <Form.Label>CPF</Form.Label>
                     <Form.Control
                         required
@@ -73,20 +80,15 @@ export default function FormCadCliente(props) {
                                 true :
                                 false
                         }
-                        value={
-                            props.modoAlterar ?
-                                props.clienteSelecionado.cpf :
-                                cliente.cpf
-                        }
+                        value={cliente.cpf}
                         onChange={manipularMudanca}
                     />
                 </Form.Group>
             </Row>
             <Row className="mb-3">
-                <Form.Group as={Col} md="8" controlId="validationCustom01">
+                <Form.Group as={Col} md="6" controlId="validationCustom01">
                     <Form.Label>Endereço</Form.Label>
                     <Form.Control
-                        required
                         type='text'
                         id='endereco'
                         name='endereco'
@@ -98,6 +100,17 @@ export default function FormCadCliente(props) {
                         onChange={manipularMudanca}
                     />
                 </Form.Group>
+                <Form.Group as={Col} md="2" controlId="validationCustom01">
+                    <Form.Label>Número</Form.Label>
+                    <Form.Control
+                        required
+                        type='text'
+                        id='numero'
+                        name='numero'
+                        value={cliente.numero}
+                        onChange={manipularMudanca}
+                    />
+                </Form.Group>
                 <Form.Group as={Col} md="4" controlId="validationCustom01">
                     <Form.Label>CEP</Form.Label>
                     <Form.Control
@@ -105,58 +118,30 @@ export default function FormCadCliente(props) {
                         type='text'
                         id='cep'
                         name='cep'
-                        value={
-                            props.modoAlterar ?
-                                props.clienteSelecionado.cep :
-                                cliente.cep
-                        }
+                        value={cliente.cep}
                         onChange={manipularMudanca}
                     />
                 </Form.Group>
             </Row>
             <Row className="mb-3">
-                <Form.Group as={Col} md="3" controlId="validationCustom03">
+                <Form.Group as={Col} md="6" controlId="validationCustom03">
+                    <Form.Label>Usuario</Form.Label>
+                    <Form.Control
+                        type='text'
+                        id='usuario'
+                        name='usuario'
+                        value={cliente.usuario}
+                        onChange={manipularMudanca}
+                    />
+                </Form.Group>
+                <Form.Group as={Col} md="6" controlId="validationCustom03">
                     <Form.Label>Telefone</Form.Label>
                     <Form.Control
                         required
                         type='text'
                         id='telefone'
                         name='telefone'
-                        value={
-                            props.modoAlterar ?
-                                props.clienteSelecionado.telefone :
-                                cliente.telefone
-                        }
-                        onChange={manipularMudanca}
-                    />
-                </Form.Group>
-                <Form.Group as={Col} md="7" controlId="validationCustom04">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                        required
-                        type='text'
-                        id='email'
-                        name='email'
-                        value={
-                            props.modoAlterar ?
-                                props.clienteSelecionado.email :
-                                cliente.email
-                        }
-                        onChange={manipularMudanca}
-                    />
-                </Form.Group>
-                <Form.Group as={Col} md="2" controlId="validationCustom04">
-                    <Form.Label>Data de Nascimento</Form.Label>
-                    <Form.Control
-                        required
-                        type='date'
-                        id='dataNascimento'
-                        name='dataNascimento'
-                        value={
-                            props.modoAlterar ?
-                                props.clienteSelecionado.dataNascimento :
-                                cliente.dataNascimento
-                        }
+                        value={cliente.telefone}
                         onChange={manipularMudanca}
                     />
                 </Form.Group>

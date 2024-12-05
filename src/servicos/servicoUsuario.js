@@ -1,4 +1,5 @@
-const urlBase = 'https://backend-lp2.vercel.app/usuarios';
+// const urlBase = 'https://backend-lp2.vercel.app/usuarios';
+const urlBase = 'http://localhost:4000/usuarios';
 
 export async function gravarUsuario (usuario) {
     const resposta = await fetch(urlBase, {
@@ -13,7 +14,7 @@ export async function gravarUsuario (usuario) {
 }
 
 export async function alterarUsuario (usuario) {
-    const resposta = await fetch(urlBase+"/"+usuario.codigo, {
+    const resposta = await fetch(urlBase+"/"+usuario.id, {
         'method': "PATCH",
         'headers': {
             "Content-Type": "application/json"
@@ -25,7 +26,7 @@ export async function alterarUsuario (usuario) {
 }
 
 export async function removerUsuario (usuario) {
-    const resposta = await fetch(urlBase+"/"+usuario.codigo, {
+    const resposta = await fetch(urlBase+"/"+usuario.id, {
         'method': "DELETE",
     });
     const resultado = await resposta.json();
@@ -49,5 +50,13 @@ export async function autLogin(login) {
         'body': JSON.stringify(login)
     });
     const resultado = await resposta.json();    
+    return resultado;
+}
+
+export async function getUsuario (username) {
+    const resposta = await fetch(urlBase+"/"+username, { 
+        'method': "GET",
+    });
+    const resultado = await resposta.json();
     return resultado;
 }

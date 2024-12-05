@@ -38,7 +38,7 @@ export const apagarUsuario = createAsyncThunk('apagarUsuario', async (usuario) =
             return {
                 "status": resultado.status,
                 "mensagem": resultado.mensagem,
-                "codigo": usuario.codigo
+                "id": usuario.id
             }
         }
         else {
@@ -136,7 +136,7 @@ const usuarioReducer = createSlice({
             .addCase(apagarUsuario.fulfilled, (state, action) => {
                 if (action.payload.status) {
                     state.estadoU = ESTADO.OCIOSO;
-                    state.listaDeUsuarios = state.listaDeUsuarios.filter((item) => item.codigo !== action.payload.codigo);
+                    state.listaDeUsuarios = state.listaDeUsuarios.filter((item) => item.id !== action.payload.id);
                 }
                 else {
                     state.estadoU = ESTADO.ERRO;
