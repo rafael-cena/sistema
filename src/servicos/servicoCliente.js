@@ -24,7 +24,7 @@ export async function alterarCliente (cliente) {
     return resultado;
 }
 
-export async function serviceExcluirCliente (cliente) {
+export async function removerCliente (cliente) {
     const resposta = await fetch(urlBase+"/"+cliente.codigo, {
         'method': "DELETE",
     });

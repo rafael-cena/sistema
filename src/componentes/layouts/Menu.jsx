@@ -2,12 +2,12 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { ContextoUsuario } from '../../App';
 
 export default function Menu(props) {
-    const {usuario, setUsuario} = useContext(ContextoUsuario);
+    const { usuario, setUsuario } = useContext(ContextoUsuario);
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
@@ -34,6 +34,9 @@ export default function Menu(props) {
                             <NavDropdown.Item href="#action/3.1">Compras</NavDropdown.Item>
                         </NavDropdown>
                         <Nav.Link href="#home">Sobre</Nav.Link>
+                    </Nav>
+                    <Nav className='ms-auto'>
+                        <Navbar.Text><strong style={{textDecoration: 'underline solid 2px', letterSpacing: '1px'}}>@{usuario.usuario}</strong></Navbar.Text>
                         <Nav.Link href="/" onClick={
                             () => {
                                 setUsuario({

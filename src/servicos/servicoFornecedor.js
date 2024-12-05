@@ -24,7 +24,7 @@ export async function alterarFornecedor (fornecedor) {
     return resultado;
 }
 
-export async function serviceExcluirFornecedor (fornecedor) {
+export async function removerFornecedor (fornecedor) {
     const resposta = await fetch(urlBase+"/"+fornecedor.codigo, {
         'method': "DELETE",
     });

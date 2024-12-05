@@ -1,13 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { alterarProduto, consultarProduto, gravarProduto, removerProduto } from "../servicos/servicoProduto";
+
 import ESTADO from "./estados";
-import { alterarProduto, consultarProduto, gravarProduto, serviceExcluirProduto } from "../servicos/servicoProduto";
 
 export const buscarProdutos = createAsyncThunk('buscarProdutos', async () => {
-    //lista de produtos
     const resultado = await consultarProduto();
     try {
-        //se for um array/lista a consulta funcionou
         if (Array.isArray(resultado)) {
             return {
                 "status": true,
@@ -33,14 +32,20 @@ export const buscarProdutos = createAsyncThunk('buscarProdutos', async () => {
 });
 
 export const apagarProduto = createAsyncThunk('apagarProduto', async (produto) => {
-    //dar previsibilidade ao conteudo do payload
-    //lista de produtos
-    const resultado = await serviceExcluirProduto(produto);
+    const resultado = await removerProduto(produto);
     try {
-        return {
-            "status": resultado.status,
-            "mensagem": resultado.mensagem,
-            "codigo": produto.codigo
+        if (resultado.status) {
+            return {
+                "status": resultado.status,
+                "mensagem": resultado.mensagem,
+                "codigo": produto.codigo
+            }
+        }
+        else {
+            return {
+                "status": resultado.status,
+                "mensagem": resultado.mensagem
+            }
         }
     }
     catch (e) {
@@ -54,13 +59,11 @@ export const apagarProduto = createAsyncThunk('apagarProduto', async (produto) =
 export const editarProduto = createAsyncThunk('editarProduto', async (produto) => {
     const resultado = await alterarProduto(produto);
     try {
-        produto.codigo = resultado.codigo;
         return {
             "status": resultado.status,
             "mensagem": resultado.mensagem,
             "produto": produto
         }
-
     }
     catch (e) {
         return {
@@ -128,7 +131,7 @@ const produtoReducer = createSlice({
             })
             .addCase(apagarProduto.pending, (state, action) => {
                 state.estado = ESTADO.PENDENTE;
-                state.mensagem = "Processando a requisição";
+                state.mensagem = "Processando a requisição (excluindo produto)";
             })
             .addCase(apagarProduto.fulfilled, (state, action) => {
                 if (action.payload.status) {
@@ -146,7 +149,7 @@ const produtoReducer = createSlice({
             })
             .addCase(editarProduto.pending, (state, action) => {
                 state.estado = ESTADO.PENDENTE;
-                state.mensagem = "Processando a requisição";
+                state.mensagem = "Processando a requisição (alterando produto)";
             })
             .addCase(editarProduto.fulfilled, (state, action) => {
                 state.mensagem = action.payload.mensagem;
@@ -164,7 +167,7 @@ const produtoReducer = createSlice({
             })
             .addCase(registrarProduto.pending, (state, action) => {
                 state.estado = ESTADO.PENDENTE;
-                state.mensagem = "Processando a requisição";
+                state.mensagem = "Processando a requisição (cadastrando produto)";
             })
             .addCase(registrarProduto.fulfilled, (state, action) => {
                 state.mensagem = action.payload.mensagem;

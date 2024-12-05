@@ -24,7 +24,7 @@ export async function alterarProduto (produto) {
     return resultado;
 }
 
-export async function serviceExcluirProduto (produto) {
+export async function removerProduto (produto) {
     const resposta = await fetch(urlBase+"/"+produto.codigo, {
         'method': "DELETE",
     });

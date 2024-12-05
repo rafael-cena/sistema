@@ -1,32 +1,46 @@
 import { Button, Container, Form } from "react-bootstrap";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ContextoUsuario } from "../../App";
+import { useDispatch, useSelector } from "react-redux";
+import { authLogin } from "../../redux/loginReducer";
+import ESTADO from "../../redux/estados";
 
 export default function TelaLogin() {
     const nomeUsuario = useRef();
     const senha = useRef();
-    const {usuario, setUsuario} = useContext(ContextoUsuario);
+    const { usuario, setUsuario } = useContext(ContextoUsuario);
+
+    const { estadoL, status, usuarioL } = useSelector((state) => state.login);
+    const disp = useDispatch();
+
+    useEffect(() => {
+        if (estadoL === ESTADO.OCIOSO) {
+            if (status) {
+                setUsuario({
+                    ...usuario,
+                    usuario: usuarioL,
+                    logado: true
+                });
+            }
+        }
+    }, [estadoL]);
 
     function manipularSubmissao(evento) {
-        const usuarioDigitado = nomeUsuario.current.value;
-        const senhaDigitada = senha.current.value;
-        if (usuarioDigitado === 'admin' && senhaDigitada === 'admin') {
-            setUsuario({
-                usuario: usuarioDigitado,
-                logado: true
-            });
-        }
-        
+        disp(authLogin({
+            username: nomeUsuario.current.value,
+            senha: senha.current.value
+        }));
+
         evento.preventDefault();
         evento.stopPropagation();
     }
-    
+
     return (
         <Container className="w-25 border p-2">
             <Form onSubmit={manipularSubmissao}>
                 <Form.Group className="mb-3">
                     <Form.Label>Usuário</Form.Label>
-                    <Form.Control 
+                    <Form.Control
                         type="text"
                         id="usuario"
                         name="usuario"
@@ -40,7 +54,7 @@ export default function TelaLogin() {
 
                 <Form.Group className="mb-3">
                     <Form.Label>Senha</Form.Label>
-                    <Form.Control 
+                    <Form.Control
                         type="password"
                         id="senha"
                         name="senha"

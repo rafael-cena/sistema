@@ -29,8 +29,8 @@ export default function TabelaProdutos(props) {
     if (estado === ESTADO.PENDENTE){
         return (
             <>
-                <Alert variant="primary">{ mensagem }</Alert>
                 <Spinner className='mt-4' animation="border" variant="success" />
+                <Alert variant="primary">{ mensagem }</Alert>
             </>
         );
     }

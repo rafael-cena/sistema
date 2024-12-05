@@ -18,9 +18,11 @@ function App() {
 
   if (!usuario.logado) {
     return (
-      <ContextoUsuario.Provider value={{ usuario, setUsuario }}>
-        <TelaLogin />
-      </ContextoUsuario.Provider>
+      <Provider store={store}>
+        <ContextoUsuario.Provider value={{ usuario, setUsuario }}>
+          <TelaLogin />
+        </ContextoUsuario.Provider>
+      </Provider>
     );
   }
   else {

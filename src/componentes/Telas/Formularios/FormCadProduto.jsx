@@ -17,7 +17,6 @@ export default function FormCadProdutos(props) {
     const [categorias, setCategorias] = useState([]);
     const [temCategorias, setTemCategorias] = useState(false);
 
-
     useEffect(() => {
         consultarCategoria().then((resultado) => {
             if (Array.isArray(resultado)) {

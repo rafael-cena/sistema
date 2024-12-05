@@ -1,6 +1,6 @@
 import { Button, Container, Table } from "react-bootstrap";
 import toast, { Toaster } from "react-hot-toast";
-import { serviceExcluirCategoria } from "../../../servicos/servicoCategoria";
+import { removerCategoria } from "../../../servicos/servicoCategoria";
 
 export default function TabelaCategorias(props) {
 
@@ -12,7 +12,7 @@ export default function TabelaCategorias(props) {
 
     function excluirCategoria(categoria){
         if(window.confirm("Deseja realmente excluir a categoria " + categoria.descricao)){
-            serviceExcluirCategoria(categoria).then((resultado) => {
+            removerCategoria(categoria).then((resultado) => {
                 if (resultado.status) {
                     props.setListaDeCategorias(props.listaDeCategorias.filter((item) => {
                         return item.codigo !== categoria.codigo;

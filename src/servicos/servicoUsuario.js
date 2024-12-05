@@ -14,7 +14,7 @@ export async function gravarUsuario (usuario) {
 
 export async function alterarUsuario (usuario) {
     const resposta = await fetch(urlBase+"/"+usuario.codigo, {
-        'method': "PUT",
+        'method': "PATCH",
         'headers': {
             "Content-Type": "application/json"
         },
@@ -24,7 +24,7 @@ export async function alterarUsuario (usuario) {
     return resultado;
 }
 
-export async function serviceExcluirUsuario (usuario) {
+export async function removerUsuario (usuario) {
     const resposta = await fetch(urlBase+"/"+usuario.codigo, {
         'method': "DELETE",
     });
@@ -33,9 +33,21 @@ export async function serviceExcluirUsuario (usuario) {
 }
 
 export async function consultarUsuario () {
-    const resposta = await fetch(urlBase, {
+    const resposta = await fetch(urlBase, { 
         'method': "GET",
     });
     const resultado = await resposta.json();
+    return resultado;
+}
+
+export async function autLogin(login) {
+    const resposta = await fetch(urlBase+"/verificarSenha", {
+        'method': 'POST',
+        'headers': {
+            "Content-Type": "application/json"
+        },
+        'body': JSON.stringify(login)
+    });
+    const resultado = await resposta.json();    
     return resultado;
 }
