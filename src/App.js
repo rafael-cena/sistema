@@ -34,7 +34,7 @@ function App() {
       <div className="App">
         <Provider store={store}>
           <ContextoUsuario.Provider value={{ usuario, setUsuario }}>
-            <BrowserRouter>
+            <BrowserRouter basename="/sistema">
               { //A ordem das rotas é importante 
               }
               <Routes>
