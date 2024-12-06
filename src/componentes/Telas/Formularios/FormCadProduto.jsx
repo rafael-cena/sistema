@@ -4,6 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { editarProduto, registrarProduto } from '../../../redux/produtoReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import ESTADO from '../../../redux/estados';
+import { buscarCategorias } from '../../../redux/categoriaReducer';
 
 export default function FormCadProdutos(props) {
     //recuperar o estado da aplicacao / fatia produto                        // ↬ produto nomeado na store
@@ -30,6 +31,10 @@ export default function FormCadProdutos(props) {
     function selecionarCategoria(evento) {
         setProduto({ ...produto, categoria: { codigo: evento.currentTarget.value } })
     }
+
+    useEffect(() => {
+        despachante(buscarCategorias());
+    }, [despachante]);
 
     function manipularSubmissao(evento) {
         const form = evento.currentTarget;
@@ -99,21 +104,6 @@ export default function FormCadProdutos(props) {
             <>
                 <Toaster position='top-right' />
                 <Form noValidate validated={formValidado} onSubmit={manipularSubmissao}>
-                    <Row className="mb-4">
-                        <Form.Group as={Col} md="4">
-                            <Form.Label>Código</Form.Label>
-                            <Form.Control
-                                required
-                                type="text"
-                                id="codigo"
-                                name="codigo"
-                                value={produto.codigo}
-                                disabled
-                                onChange={manipularMudanca}
-                            />
-                            <Form.Control.Feedback type='invalid'>Por favor, informe o código do produto!</Form.Control.Feedback>
-                        </Form.Group>
-                    </Row>
                     <Row className="mb-4">
                         <Form.Group as={Col} md="12">
                             <Form.Label>Descrição</Form.Label>

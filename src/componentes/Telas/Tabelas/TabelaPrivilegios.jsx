@@ -3,44 +3,45 @@ import toast, { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import ESTADO from "../../../redux/estados";
-import { apagarFornecedor, buscarFornecedores } from "../../../redux/fornecedorReducer";
+import { apagarPrivilegio, buscarPrivilegios } from "../../../redux/privilegioReducer";
 
-export default function TabelaFornecedores(props) {
-    const { estadoF, mensagemF, listaDeFornecedores } = useSelector((state) => state.fornecedor);
+
+export default function TabelaPrivilegios(props) {
+    const { estadoP, mensagemP, listaDePrivilegios } = useSelector((state) => state.privilegio);
     const despachante = useDispatch();
 
     useEffect(() => {
-        despachante(buscarFornecedores());
+        despachante(buscarPrivilegios());
     }, [despachante]);
 
-    function editarFornecedor(fornecedor) {
-        props.setModoAlterar(true);
-        props.setFornecedorSelecionado(fornecedor);
+    function editarPrivilegio(privilegio) {
+        props.setModoEdicao(true);
+        props.setPrivilegioSelecionado(privilegio);
         props.setExibirTabela(false);
     }
 
-    function excluirFornecedor(fornecedor) {
-        if (window.confirm("Deseja realmente excluir o fornecedor " + fornecedor.nome)) {
-            despachante(apagarFornecedor(fornecedor));
+    function excluirPrivilegio(privilegio) {
+        if (window.confirm("Deseja realmente excluir a privilegio " + privilegio.descricao)) {
+            despachante(apagarPrivilegio(privilegio));
         }
     }
 
-    if (estadoF === ESTADO.PENDENTE) {
+    if (estadoP === ESTADO.PENDENTE) {
         return (
             <>
                 <Spinner className='mt-4' animation="border" variant="success" />
-                <Alert variant="primary">{mensagemF}</Alert>
+                <Alert variant="primary">{mensagemP}</Alert>
             </>
         );
     }
-    else if (estadoF === ESTADO.ERRO) {
+    else if (estadoP === ESTADO.ERRO) {
         return (
             <>
-                <Alert variant="danger">{mensagemF}</Alert>
+                <Alert variant="danger">{mensagemP}</Alert>
             </>
         );
     }
-    else if (estadoF === ESTADO.OCIOSO) {
+    else if (estadoP === ESTADO.OCIOSO)
         return (
             <>
                 <Container>
@@ -52,41 +53,27 @@ export default function TabelaFornecedores(props) {
                     </Button>
                     <Table striped bordered hover>
                         <thead>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>CNPJ</th>
-                            <th>CEP</th>
-                            <th>Endereço</th>
-                            <th>Numero</th>
-                            <th>Telefone</th>
-                            <th>Codigo Produto</th>
-                            <th>Nome do Produto</th>
+                            <th>Código</th>
+                            <th>Descrição</th>
                             <th>Ações</th>
                         </thead>
                         <tbody>
                             {
-                                listaDeFornecedores?.map((fornecedor) => {
+                                listaDePrivilegios?.map((privilegio) => {
                                     return (
                                         <tr>
-                                            <td>{fornecedor.id}</td>
-                                            <td>{fornecedor.nome}</td>
-                                            <td>{fornecedor.cnpj}</td>
-                                            <td>{fornecedor.cep}</td>
-                                            <td>{fornecedor.endereco}</td>
-                                            <td>{fornecedor.numero}</td>
-                                            <td>{fornecedor.telefone}</td>
-                                            <td>{fornecedor.produto.codigo}</td>
-                                            <td>{fornecedor.produto.descricao}</td>
+                                            <td>{privilegio.codigo}</td>
+                                            <td>{privilegio.descricao}</td>
                                             <td>
                                                 <Button onClick={() => {
-                                                    editarFornecedor(fornecedor);
+                                                    editarPrivilegio(privilegio);
                                                 }} variant="warning">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                                     </svg>
                                                 </Button> <Button onClick={() => {
-                                                    excluirFornecedor(fornecedor);
+                                                    excluirPrivilegio(privilegio);
                                                 }} variant="danger">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
@@ -100,10 +87,9 @@ export default function TabelaFornecedores(props) {
                             }
                         </tbody>
                     </Table>
-                    <p>Quatidade de fornecedores cadastrados: {listaDeFornecedores.length}</p>
+                    <p>Quatidade de privilegios cadastrados: {listaDePrivilegios.length}</p>
                 </Container>
                 <Toaster position="top-right" reverseOrder={false}></Toaster>
             </>
         );
-    }
 }

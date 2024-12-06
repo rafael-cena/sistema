@@ -1,22 +1,22 @@
-import FormCadFornecedor from "./Formularios/FormCadFornecedor";
-import Pagina from '../layouts/Pagina';
 import { Alert } from "react-bootstrap";
-import TabelaFornecedores from "./Tabelas/TabelaFornecedores";
 import { useState } from "react";
-import { fornecedores } from "../../dados/mockFornecedores";
+import Pagina from "../layouts/Pagina";
+import TabelaFornecedores from "./Tabelas/TabelaFornecedores";
+import FormCadFornecedor from "./Formularios/FormCadFornecedor";
+
 
 export default function TelaCadastroFornecedor(props) {
     const [exibirTabela, setExibirTabela] = useState(true);
-    const [ListaDeFornecedores, setListaDeFornecedores] = useState(fornecedores);
     const [modoAlterar, setModoAlterar] = useState(false);
     const [fornecedorSelecionado, setFornecedorSelecionado] = useState({
-        codigo: 0,
-        descricao: "",
+        id: 0,
+        nome: "",
         cnpj: "",
-        cidade: "",
-        endereco: "",
         cep: "",
-        prazoEntrega: ""
+        endereco: "",
+        numero: "",
+        telefone: "",
+        produto: {}
     });
 
     return (
@@ -26,13 +26,12 @@ export default function TelaCadastroFornecedor(props) {
             </Alert>
             {
                 exibirTabela ?
-                <TabelaFornecedores listaFornecedores={ListaDeFornecedores} setListaDeFornecedores={setListaDeFornecedores}
-                                    setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
-                                    modoAlterar={modoAlterar} setFornecedorSelecionado={setFornecedorSelecionado} /> :
-                <FormCadFornecedor  listaFornecedores={ListaDeFornecedores} setListaDeFornecedores={setListaDeFornecedores}
-                                    setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
-                                    modoAlterar={modoAlterar} 
-                                    setFornecedorSelecionado={setFornecedorSelecionado} fornecedorSelecionado={fornecedorSelecionado} />
+                    <TabelaFornecedores setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
+                        setFornecedorSelecionado={setFornecedorSelecionado} /> :
+                    <FormCadFornecedor setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
+                        modoAlterar={modoAlterar}
+                        setFornecedorSelecionado={setFornecedorSelecionado}
+                        fornecedorSelecionado={fornecedorSelecionado} />
             }
         </Pagina>
     );

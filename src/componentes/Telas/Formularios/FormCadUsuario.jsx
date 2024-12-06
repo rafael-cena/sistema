@@ -39,7 +39,7 @@ export default function FormCadUsuario(props) {
         const form = evento.currentTarget;
         if (form.checkValidity()) {
             if (props.modoAlterar) {
-                if (usuario.senha === document.getElementById('confSenha')) {
+                if (usuario.senha === document.getElementById('confSenha').value) {
                     despachante(editarUsuario(usuario));
                     if (estadoU === ESTADO.ERRO) toast.error(mensagemU);
                     else toast.success(mensagemU);
@@ -48,7 +48,7 @@ export default function FormCadUsuario(props) {
                 else toast.error('Erro ao confirmar a senha!');
             }
             else {
-                if (usuario.senha === document.getElementById('confSenha')) {
+                if (usuario.senha === document.getElementById('confSenha').value) {
                     despachante(registrarUsuario(usuario));
                     if (estadoU === ESTADO.ERRO) toast.error(mensagemU);
                     else toast.success(mensagemU);

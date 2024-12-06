@@ -51,11 +51,3 @@ export async function autLogin(login) {
     const resultado = await resposta.json();    
     return resultado;
 }
-
-export async function getUsuario (username) {
-    const resposta = await fetch(urlBase+"/"+username, { 
-        'method': "GET",
-    });
-    const resultado = await resposta.json();
-    return resultado;
-}

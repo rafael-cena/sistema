@@ -12,6 +12,10 @@ export default function FormCadCliente(props) {
     const [cliente, setCliente] = useState(props.clienteSelecionado);
     const [validated, setValidated] = useState(false);
 
+    function manipularUsuario (evento) {
+        setCliente({ ...cliente, usuario: { username: evento.currentTarget.value } });
+    }
+
     function handleSubmit(evento) {
         const form = evento.currentTarget;
         if (form.checkValidity()) {
@@ -141,16 +145,16 @@ export default function FormCadCliente(props) {
                     </Form.Group>
                 </Row>
                 <Row className="mb-3">
-                    <Form.Group as={Col} md="6" controlId="validationCustom03">
+                    {/* <Form.Group as={Col} md="6" controlId="validationCustom03">
                         <Form.Label>Usuario</Form.Label>
                         <Form.Control
                             type='text'
-                            id='usuario.username'
-                            name='usuario.username'
+                            id='usuario'
+                            name='usuario'
                             value={cliente.usuario.username}
                             onChange={manipularMudanca}
                         />
-                    </Form.Group>
+                    </Form.Group> */}
                     <Form.Group as={Col} md="6" controlId="validationCustom03">
                         <Form.Label>Telefone</Form.Label>
                         <Form.Control
