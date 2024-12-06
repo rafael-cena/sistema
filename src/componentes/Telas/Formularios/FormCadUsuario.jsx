@@ -1,36 +1,68 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
+import { Button, Spinner, Col, Form, InputGroup, Row, Alert } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { buscarPrivilegios } from "../../../redux/privilegioReducer"
+import toast, { Toaster } from "react-hot-toast";
+import { editarUsuario, registrarUsuario } from "../../../redux/usuarioReducer";
+import { useSelector, useDispatch } from "react-redux";
+import ESTADO from "../../../redux/estados";
 
 export default function FormCadUsuario(props) {
-    const [usuario, setUsuario] = useState({
-        userName: "",
-        Nome: "",
-        Sobrenome: "",
-        Email: "",
-        Senha: "",
-        dataNascimento: ""
-    });
+    const { estadoU, mensagemU } = useSelector((state) => state.usuario);
+    const { estadoP, mensagemP, listaDePrivilegios } = useSelector((state) => state.privilegio);
+    const despachante = useDispatch();
 
+    const [usuario, setUsuario] = useState(props.usuarioSelecionado);
     const [validated, setFormValidated] = useState(false);
+    const [temPrivilegios, setTemPrivilegios] = useState(false);
+
+    useEffect(() => {
+        if (estadoP === ESTADO.OCIOSO && listaDePrivilegios.length > 0) {
+            setTemPrivilegios(true);
+            if (mensagemP !== "")
+                toast.success(mensagemP);
+        }
+        else if (estadoP === ESTADO.PENDENTE)
+            toast(mensagemP, {
+                icon: '⏳'
+            });
+    }, [estadoP]);
+
+    useEffect(() => {
+        despachante(buscarPrivilegios());
+    }, []);
+
+    function selecionarPrivilegio(evento) {
+        setUsuario({ ...usuario, privilegio: { codigo: evento.currentTarget.value } });
+    }
 
     function handleSubmit(evento) {
         const form = evento.currentTarget;
         if (form.checkValidity()) {
             if (props.modoAlterar) {
-                props.setListaDeUsuario(props.listaUsuario.map((item) => {
-                    return item.userName !== props.usuarioSelecionado.userName ? item : props.usuarioSelecionado;
-                }));
-                props.setModoAlterar(false);
+                if (usuario.senha === document.getElementById('confSenha').value) {
+                    despachante(editarUsuario(usuario));
+                    if (estadoU === ESTADO.ERRO) toast.error(mensagemU);
+                    else toast.success(mensagemU);
+                    props.setModoAlterar(false);
+                }
+                else toast.error('Erro ao confirmar a senha!');
             }
             else {
-                //cadastra usuario
-                props.setListaDeUsuario([...props.listaUsuario, usuario]);
+                if (usuario.senha === document.getElementById('confSenha').value) {
+                    despachante(registrarUsuario(usuario));
+                    if (estadoU === ESTADO.ERRO) toast.error(mensagemU);
+                    else toast.success(mensagemU);
+                }
+                else toast.error('Erro ao confirmar a senha!');
             }
-            // exibir a tabela do produto incluido/alterado
+            setUsuario({
+                id: "",
+                username: "",
+                senha: "",
+                nome: "",
+                email: "",
+                privilegio: {}
+            });
             props.setExibirTabela(true);
         }
         else {
@@ -43,145 +75,137 @@ export default function FormCadUsuario(props) {
     function manipularMudanca(evento) {
         const elemento = evento.target.name;
         const valor = evento.target.value;
-        if (props.modoAlterar) {
-            props.setUsuarioSelecionado({ ...props.usuarioSelecionado, [elemento]: valor });
-        }
-        else {
-            setUsuario({ ...usuario, [elemento]: valor });
-        }
+        setUsuario({ ...usuario, [elemento]: valor });
     }
-    // "..." => Operador de Espalhamento
 
-    return (
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Row className="mb-3">
-                <Form.Group as={Col} md="3">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        id="userName"
-                        name="userName"
-                        disabled={
-                            props.modoAlterar ?
-                                true :
-                                false
-                        }
-                        value={
-                            props.modoAlterar ?
-                                props.usuarioSelecionado.userName :
-                                usuario.userName
-                        }
-                        onChange={manipularMudanca}
-                    />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Form.Label>Nome</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        id="Nome"
-                        name="Nome"
-                        value={
-                            props.modoAlterar ?
-                                props.usuarioSelecionado.Nome :
-                                usuario.Nome
-                        }
-                        onChange={manipularMudanca}
-                    />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Form.Label>Sobrenome</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        id="Sobrenome"
-                        name="Sobrenome"
-                        value={
-                            props.modoAlterar ?
-                                props.usuarioSelecionado.Sobrenome :
-                                usuario.Sobrenome
-                        }
-                        onChange={manipularMudanca}
-                    />
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                </Form.Group>
-            </Row>
-            <Row className="mb-3">
-                <Form.Group as={Col} md="6">
-                    <Form.Label>Email</Form.Label>
-                    <InputGroup hasValidation>
-                        <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-                        <Form.Control
-                            type="text"
-                            id="Email"
-                            name="Email"
-                            aria-describedby="inputGroupPrepend"
-                            required
-                            value={
-                                props.modoAlterar ?
-                                    props.usuarioSelecionado.Email :
-                                    usuario.Email
-                            }
-                            onChange={manipularMudanca}
-                        />
-                    </InputGroup>
-                    <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-                </Form.Group>
-                <Form.Group as={Col} md="3">
-                    <Form.Label>Senha</Form.Label>
-                    <Form.Control
-                        type="text"
-                        id="Senha"
-                        name="Senha"
-                        aria-describedby="inputGroupPrepend"
-                        required
-                        value={
-                            props.modoAlterar ?
-                                props.usuarioSelecionado.Senha :
-                                usuario.Senha
-                        }
-                        onChange={manipularMudanca}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        Please choose a username.
-                    </Form.Control.Feedback>
-                </Form.Group>
-            </Row>
-            <Row className="mb-3">
-                <Form.Group as={Col} md="3">
-                    <Form.Label>Data de Nascimento</Form.Label>
-                    <Form.Control
-                        type="text"
-                        id="dataNascimento"
-                        name="dataNascimento"
-                        required
-                        value={
-                            props.modoAlterar ?
-                                props.usuarioSelecionado.dataNascimento :
-                                usuario.dataNascimento
-                        }
-                        onChange={manipularMudanca}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        Please choose a username.
-                    </Form.Control.Feedback>
-                </Form.Group>
-            </Row>
-            <Row className='mt-2 mb-2'>
-                <Col md={1}>
-                    {
-                        props.modoAlterar ?
-                            <Button type="submit">Alterar</Button> :
-                            <Button type="submit">Cadastrar</Button>
-                    }
-                </Col>
+    if (estadoU === ESTADO.PENDENTE)
+        return (
+            <>
+                <Alert variant="primary">{mensagemU}</Alert>
+                <Spinner className='mt-4' animation="border" variant="success" />
+            </>
+        );
+
+    else if (estadoU === ESTADO.ERRO)
+        return (
+            <>
+                <Alert variant="danger">{mensagemU}</Alert>
                 <Col md={{ offset: 1 }}>
-                    <Button onClick={() => { props.setExibirTabela(true); }}>Voltar</Button>
+                    <Button onClick={() => {
+                        props.setExibirTabela(true);
+                    }}>Voltar</Button>
                 </Col>
-            </Row>
-        </Form>
-    );
+            </>
+        );
+
+    else if (estadoU === ESTADO.OCIOSO)
+        return (
+            <>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                    <Row className="mb-3">
+                        <Form.Group as={Col} md="6">
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control
+                                required
+                                type="text"
+                                id="username"
+                                name="username"
+                                disabled={
+                                    props.modoAlterar ?
+                                        true :
+                                        false
+                                }
+                                value={usuario.username}
+                                onChange={manipularMudanca}
+                            />
+                            <Form.Control.Feedback type="invalid">Por favor, informe a um nome de usuário!</Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group as={Col} md="3">
+                            <Form.Label>Senha</Form.Label>
+                            <Form.Control
+                                required
+                                type="password"
+                                id="senha"
+                                name="senha"
+                                value={usuario.senha}
+                                onChange={manipularMudanca}
+                            />
+                            <Form.Control.Feedback type="invalid">Por favor, informe uma senha!</Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group as={Col} md="3">
+                            <Form.Label>Confirmar Senha</Form.Label>
+                            <Form.Control
+                                required
+                                type="password"
+                                id="confSenha"
+                                name="confSenha"
+                            />
+                            <Form.Control.Feedback type="invalid">A confirmacao de senha deve ser igual a sua senha!</Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
+                    <Row>
+                        <Form.Group as={Col} md="5">
+                            <Form.Label>Nome</Form.Label>
+                            <Form.Control
+                                required
+                                type="text"
+                                id="nome"
+                                name="nome"
+                                value={usuario.nome}
+                                onChange={manipularMudanca}
+                            />
+                            <Form.Control.Feedback>Por favor, informe o seu nome!</Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group as={Col} md="5">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                type="text"
+                                id="email"
+                                name="email"
+                                required
+                                value={usuario.email}
+                                onChange={manipularMudanca}
+                            />
+                            <Form.Control.Feedback>Por favor, informe o seu email!</Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group as={Col} md={temPrivilegios ? 2 : 0}>
+                            <Form.Label>Privilegio: </Form.Label>
+                            <Form.Select
+                                id='privilegio'
+                                name='privilegio'
+                                value={usuario.privilegio.descricao}
+                                onChange={selecionarPrivilegio}>
+                                <option selected value={null} disabled>Selecione um Privilegio</option>
+                                {
+                                    listaDePrivilegios.map((privilegio) => {
+                                        return <option value={privilegio.codigo}>
+                                            {privilegio.descricao}
+                                        </option>
+                                    })
+                                }
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group as={Col} md={2}>
+                            {
+                                temPrivilegios ? "" : <Spinner className='mt-4' animation="border" variant="success" />
+                            }
+                        </Form.Group>
+                    </Row>
+                    <Row className='mt-2 mb-2'>
+                        <Col md={1}>
+                            {
+                                props.modoAlterar ?
+                                    <Button type="submit">Alterar</Button> :
+                                    <Button type="submit">Cadastrar</Button>
+                            }
+                        </Col>
+                        <Col md={{ offset: 1 }}>
+                            <Button onClick={() => { props.setExibirTabela(true); }}>Voltar</Button>
+                        </Col>
+                    </Row>
+                </Form>
+                <Toaster position="top-right" reverseOrder={false} />
+            </>
+        );
+
 }

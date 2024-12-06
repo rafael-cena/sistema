@@ -3,13 +3,13 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import ESTADO from "../../../redux/estados";
-import { editarCategoria, registrarCategoria } from '../../../redux/categoriaReducer';
+import { editarPrivilegio, registrarPrivilegio } from "../../../redux/privilegioReducer";
 
-export default function FormCadCategorias(props) {
-    const { estadoCat, mensagemCat } = useSelector((state) => state.categoria);
+export default function FormCadPrivilegios(props) {
+    const { estadoP, mensagemP } = useSelector((state) => state.privilegio);
     const despachante = useDispatch();
 
-    const [categoria, setCategoria] = useState(props.categoriaSelecionado);
+    const [privilegio, setPrivilegio] = useState(props.privilegioSelecionado);
     const [formValidado, setFormValidado] = useState(false);
 
     function manipularSubmissao(evento) {
@@ -17,17 +17,17 @@ export default function FormCadCategorias(props) {
         if (form.checkValidity()) {
 
             if (!props.modoEdicao) {
-                despachante(registrarCategoria(categoria));
-                if (estadoCat === ESTADO.ERRO) toast.error(mensagemCat);
-                else toast.success(mensagemCat);
+                despachante(registrarPrivilegio(privilegio));
+                if (estadoP === ESTADO.ERRO) toast.error(mensagemP);
+                else toast.success(mensagemP);
             }
             else {
-                despachante(editarCategoria(categoria));
-                if (estadoCat === ESTADO.ERRO) toast.error(mensagemCat);
-                else toast.success(mensagemCat);
+                despachante(editarPrivilegio(privilegio));
+                if (estadoP === ESTADO.ERRO) toast.error(mensagemP);
+                else toast.success(mensagemP);
                 props.setModoEdicao(false);
             }
-            setCategoria({
+            setPrivilegio({
                 codigo: 0,
                 descricao: ""
             });
@@ -44,21 +44,21 @@ export default function FormCadCategorias(props) {
     function manipularMudanca(evento) {
         const elemento = evento.target.name;
         const valor = evento.target.value;
-        setCategoria({ ...categoria, [elemento]: valor });
+        setPrivilegio({ ...privilegio, [elemento]: valor });
     }
 
-    if (estadoCat === ESTADO.PENDENTE)
+    if (estadoP === ESTADO.PENDENTE)
         return (
             <>
-                <Alert variant="primary">{mensagemCat}</Alert>
+                <Alert variant="primary">{mensagemP}</Alert>
                 <Spinner className='mt-4' animation="border" variant="success" />
             </>
         );
 
-    else if (estadoCat === ESTADO.ERRO)
+    else if (estadoP === ESTADO.ERRO)
         return (
             <>
-                <Alert variant="danger">{mensagemCat}</Alert>
+                <Alert variant="danger">{mensagemP}</Alert>
                 <Col md={{ offset: 1 }}>
                     <Button onClick={() => {
                         props.setExibirTabela(true);
@@ -67,7 +67,7 @@ export default function FormCadCategorias(props) {
             </>
         );
 
-    else if (estadoCat === ESTADO.OCIOSO)
+    else if (estadoP === ESTADO.OCIOSO)
         return (
             <Container>
                 <Form noValidate validated={formValidado} onSubmit={manipularSubmissao}>
@@ -79,11 +79,11 @@ export default function FormCadCategorias(props) {
                                 type="text"
                                 id="codigo"
                                 name="codigo"
-                                value={categoria.codigo}
+                                value={privilegio.codigo}
                                 disabled
                                 onChange={manipularMudanca}
                             />
-                            <Form.Control.Feedback type='invalid'>Por favor, informe o código da categoria!</Form.Control.Feedback>
+                            <Form.Control.Feedback type='invalid'>Por favor, informe o código do privilegio!</Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group as={Col} md="10">
                             <Form.Label>Descrição</Form.Label>
@@ -92,10 +92,10 @@ export default function FormCadCategorias(props) {
                                 type="text"
                                 id="descricao"
                                 name="descricao"
-                                value={categoria.descricao}
+                                value={privilegio.descricao}
                                 onChange={manipularMudanca}
                             />
-                            <Form.Control.Feedback type="invalid">Por favor, informe a descrição do categoria!</Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">Por favor, informe a descrição do privilegio!</Form.Control.Feedback>
                         </Form.Group>
                     </Row>
                     <Row className='mt-2 mb-2'>

@@ -1,36 +1,40 @@
-import FormCadCategoria from "./Formularios/FormCadCategoria";
-import Pagina from '../layouts/Pagina';
-import { Alert } from "react-bootstrap";
-import TabelaCategorias from "./Tabelas/TabelaCategorias";
 import { useState } from "react";
-import { categorias } from "../../dados/mockCategoria";
+import { Alert } from "react-bootstrap";
+import Pagina from "../layouts/Pagina";
+import TabelaCategorias from "./Tabelas/TabelaCategorias";
+import FormCadCategorias from "./Formularios/FormCadCategoria";
 
-export default function TelaCadastroCategoria(props) {
+export default function TelaCadastroCategoria() {
     const [exibirTabela, setExibirTabela] = useState(true);
-    const [listaDeCategorias, setListaDeCategorias] = useState(categorias);
-    const [modoAlterar, setModoAlterar] = useState(false);
-    const [categoriaSelecionada, setCategoriaSelecionada] = useState({
+    const [modoEdicao, setModoEdicao] = useState(false);
+    const [categoriaSelecionado, setCategoriaSelecionado] = useState({
         codigo: 0,
-        nome: "",
-        descricao: "",
-        status: ""
+        descricao: ""
     });
 
     return (
-        <Pagina>
-            <Alert className="text-center" variant="success">
-                <h2 className="text-center">Tela de cadastro de Categorias</h2>
-            </Alert>
-            {
-                exibirTabela ?
-                    <TabelaCategorias listaCategorias={listaDeCategorias} setListaDeCategorias={setListaDeCategorias}
-                        setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
-                        modoAlterar={modoAlterar} setCategoriaSelecionada={setCategoriaSelecionada} /> :
-                    <FormCadCategoria listaCategorias={listaDeCategorias} setListaDeCategorias={setListaDeCategorias}
-                        setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
-                        modoAlterar={modoAlterar}
-                        setCategoriaSelecionada={setCategoriaSelecionada} categoriaSelecionada={categoriaSelecionada} />
-            }
-        </Pagina>
+        <div>
+            <Pagina>
+                <Alert className="mt-02 mb-02 success text-center" variant="success">
+                    <h2>
+                        Cadastro de Categoria
+                    </h2>
+                </Alert>
+                {
+                    exibirTabela ?
+                        <TabelaCategorias setExibirTabela={setExibirTabela}
+                            setModoEdicao={setModoEdicao}
+                            setCategoriaSelecionado={setCategoriaSelecionado} /> :
+                        <FormCadCategorias setExibirTabela={setExibirTabela}
+                            categoriaSelecionado={categoriaSelecionado}
+                            setCategoriaSelecionado={setCategoriaSelecionado}
+                            modoEdicao={modoEdicao}
+                            setModoEdicao={setModoEdicao}
+
+                        />
+                }
+            </Pagina>
+        </div>
     );
+
 }

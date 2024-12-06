@@ -3,84 +3,78 @@ import toast, { Toaster } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import ESTADO from "../../../redux/estados";
-import { apagarCliente, buscarClientes } from "../../../redux/clienteReducer";
+import { apagarPrivilegio, buscarPrivilegios } from "../../../redux/privilegioReducer";
 
-export default function TabelaClientes(props) {
-    const { estadoCli, mensagemCli, listaDeClientes } = useSelector((state) => state.cliente);
+
+export default function TabelaPrivilegios(props) {
+    const { estadoP, mensagemP, listaDePrivilegios } = useSelector((state) => state.privilegio);
     const despachante = useDispatch();
 
     useEffect(() => {
-        despachante(buscarClientes());
+        despachante(buscarPrivilegios());
     }, [despachante]);
 
-    function alterarCliente(cliente) {
-        props.setModoAlterar(true);
-        props.setClienteSelecionado(cliente);
+    function editarPrivilegio(privilegio) {
+        props.setModoEdicao(true);
+        props.setPrivilegioSelecionado(privilegio);
         props.setExibirTabela(false);
     }
 
-    function excluirCliente(cliente) {
-        if (window.confirm("Deseja realmente excluir o cliente " + cliente.nome)) {
-            despachante(apagarCliente(cliente));
+    function excluirPrivilegio(privilegio) {
+        if (window.confirm("Deseja realmente excluir a privilegio " + privilegio.descricao)) {
+            despachante(apagarPrivilegio(privilegio));
         }
     }
 
-    if (estadoCli === ESTADO.PENDENTE) {
+    if (estadoP === ESTADO.PENDENTE) {
         return (
             <>
                 <Spinner className='mt-4' animation="border" variant="success" />
-                <Alert variant="primary">{mensagemCli}</Alert>
+                <Alert variant="primary">{mensagemP}</Alert>
             </>
         );
     }
-    else if (estadoCli === ESTADO.ERRO) {
+    else if (estadoP === ESTADO.ERRO) {
         return (
             <>
-                <Alert variant="danger">{mensagemCli}</Alert>
+                <Alert variant="danger">{mensagemP}</Alert>
             </>
         );
     }
-    else if (estadoCli === ESTADO.OCIOSO)
+    else if (estadoP === ESTADO.OCIOSO)
         return (
             <>
                 <Container>
-                    <Button className="mb-3" variant="primary" onClick={() => { props.setExibirTabela(false); }}>
+                    <Button className="mb-3" variant="primary"
+                        onClick={() => {
+                            props.setExibirTabela(false);
+                        }}>
                         Adicionar
                     </Button>
                     <Table striped bordered hover>
                         <thead>
-                            <th>Nome</th>
-                            <th>CPF</th>
-                            <th>Endereço</th>
-                            <th>Numero</th>
-                            <th>CEP</th>
-                            <th>Telefone</th>
-                            <th>Username</th>
-                            <th>Email</th>
+                            <th>Código</th>
+                            <th>Descrição</th>
                             <th>Ações</th>
                         </thead>
-
                         <tbody>
                             {
-                                
-                                listaDeClientes?.map((cliente) => {
+                                listaDePrivilegios?.map((privilegio) => {
                                     return (
                                         <tr>
-                                            <td>{cliente.nome}</td>
-                                            <td>{cliente.cpf}</td>
-                                            <td>{cliente.endereco}</td>
-                                            <td>{cliente.numero}</td>
-                                            <td>{cliente.cep}</td>
-                                            <td>{cliente.telefone}</td>
-                                            <td>{cliente.usuario.username || "Sem usuário cadastrado"}</td>
-                                            <td>{cliente.usuario.email || "Sem usuário cadastrado"}</td>
+                                            <td>{privilegio.codigo}</td>
+                                            <td>{privilegio.descricao}</td>
                                             <td>
-                                                <Button onClick={() => { alterarCliente(cliente) }} variant="warning">
+                                                <Button onClick={() => {
+                                                    editarPrivilegio(privilegio);
+                                                }} variant="warning">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                                     </svg>
-                                                </Button> <Button onClick={() => { excluirCliente(cliente) }} variant="danger">
+                                                </Button> <Button onClick={() => {
+                                                    excluirPrivilegio(privilegio);
+                                                }} variant="danger">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
                                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                                         <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
@@ -88,13 +82,14 @@ export default function TabelaClientes(props) {
                                                 </Button>
                                             </td>
                                         </tr>
-                                    );
+                                    )
                                 })
                             }
                         </tbody>
                     </Table>
-                    <p>Quantidade de clientes cadastrados: {listaDeClientes.length}</p>
+                    <p>Quatidade de privilegios cadastrados: {listaDePrivilegios.length}</p>
                 </Container>
+                <Toaster position="top-right" reverseOrder={false}></Toaster>
             </>
         );
 }

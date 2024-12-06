@@ -1,21 +1,19 @@
-import FormCadUsuario from "./Formularios/FormCadUsuario";
-import Pagina from '../layouts/Pagina';
-import { Alert } from "react-bootstrap";
-import TabelaUsuarios from "./Tabelas/TabelaUsuario";
 import { useState } from "react";
-import { usuarios } from "../../dados/mockUsuarios";
+import { Alert } from "react-bootstrap";
+import Pagina from '../layouts/Pagina';
+import TabelaUsuarios from "./Tabelas/TabelaUsuario";
+import FormCadUsuario from "./Formularios/FormCadUsuario";
 
-export default function TelaCadastroUsuario(props) {
+export default function TelaCadastroUsuario() {
     const [exibirTabela, setExibirTabela] = useState(true);
-    const [listaDeUsuario, setListaDeUsuario] = useState(usuarios);
     const [modoAlterar, setModoAlterar] = useState(false);
     const [usuarioSelecionado, setUsuarioSelecionado] = useState({
-        userName: "",
-        Nome: "",
-        Sobrenome: "",
-        Email: "",
-        Senha: "",
-        dataNascimento: ""
+        id: "",
+        username: "",
+        senha: "",
+        nome: "",
+        email: "",
+        privilegio: {}
     });
 
     return (
@@ -25,11 +23,9 @@ export default function TelaCadastroUsuario(props) {
             </Alert>
             {
                 exibirTabela ?
-                    <TabelaUsuarios listaUsuario={listaDeUsuario} setListaDeUsuario={setListaDeUsuario}
-                        setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
-                        modoAlterar={modoAlterar} setUsuarioSelecionado={setUsuarioSelecionado} /> :
-                    <FormCadUsuario listaUsuario={listaDeUsuario} setListaDeUsuario={setListaDeUsuario}
-                        setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
+                    <TabelaUsuarios setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
+                        setUsuarioSelecionado={setUsuarioSelecionado} /> :
+                    <FormCadUsuario setExibirTabela={setExibirTabela} setModoAlterar={setModoAlterar}
                         modoAlterar={modoAlterar}
                         setUsuarioSelecionado={setUsuarioSelecionado} usuarioSelecionado={usuarioSelecionado} />
             }
